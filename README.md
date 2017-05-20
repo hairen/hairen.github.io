@@ -1,4 +1,4 @@
 # hairen.github.io
-# Hello World Blog
+# My first blog
 
 I love :coffee: What about you
