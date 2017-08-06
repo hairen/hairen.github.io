@@ -12,5 +12,5 @@
 # Lazy Expressions (Default Value Expressions) #
 * A default value could be in the form of a function call. This would be a lazy expressions because the function would not be called until it’s needed.
 
-# Gather & Spread *
+# Gather & Spread #
 * Only data types that have an iterator can be spread.
