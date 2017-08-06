@@ -8,3 +8,9 @@
 
 # Block Scope #
 * The behavior of the const keyword in JavaScript varies slightly from other languages. Const prevents a variable from being reassigned. However, complex data types like arrays and objects could still be mutated.
+
+# Lazy Expressions (Default Value Expressions) #
+* A default value could be in the form of a function call. This would be a lazy expressions because the function would not be called until it’s needed.
+
+# Gather & Spread *
+* Only data types that have an iterator can be spread.
