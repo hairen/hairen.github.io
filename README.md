@@ -33,6 +33,15 @@ For the object destructuring form specifically, when leaving off a var/let/const
 ## Object Literal Extensions ##
 * You should only use concise methods if you're never going to need them to do recursion or event binding/unbinding.
 
+## For..Of vs Foo ..In loop ##
+* **for..in** loops over the keys/indexes in the a array, while **for..of** loops over the values in a array.
+* Standard built-in values in JavaScript that are by default iterables (or provide them) include:
+  * Arrays
+  * Strings
+  * Generators
+  * Collections / TypedArrays
+* **for..of** loops can be prematurely stopped, just like other loops, with _break_, _continue_, _return_ (if in a function), and _thrown exceptions_.
+
 # Helpful Git Commands #
 ## Checking Out and Testing Pull Requests ##
 * Fetch all pull request branches  
