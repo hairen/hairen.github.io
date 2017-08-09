@@ -17,6 +17,7 @@
 
 ## Destructuring ##
 * Not Just Declarations  
+
 ```javascript
 var a, b, c, x, y, z;
 
@@ -26,8 +27,11 @@ var a, b, c, x, y, z;
 console.log( a, b, c );				// 1 2 3
 console.log( x, y, z );				// 4 5 6
 ```
+
 For the object destructuring form specifically, when leaving off a var/let/const declarator, we had to surround the whole assignment expression in ( ), because otherwise the { .. } on the lefthand side as the first element in the statement is taken to be a block statement instead of an object.
 
+## Object Literal Extensions ##
+# You should only use concise methods if you're never going to need them to do recursion or event binding/unbinding.
 
 # Helpful Git Commands #
 ## Checking Out and Testing Pull Requests ##
