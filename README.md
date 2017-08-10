@@ -9,7 +9,7 @@
 
 ## Block Scope ##
 * The behavior of the const keyword in JavaScript varies slightly from other languages. Const prevents a variable from being reassigned. However, complex data types like arrays and objects could still be mutated.
-* Assigning an object or array as a constant means that value will not be able to be garbage collected until that constant's lexical scope goes away, as the reference to the value can never be unset. 
+* Assigning an object or array as a constant means that value will not be able to be garbage collected until that constant's lexical scope goes away, as the reference to the value can never be unset. My advice: to avoid potentially confusing code, only use const for variables that you're intentionally and obviously signaling will not change. In other words, don't rely on const for code behavior, but instead use it as a tool for signaling intent, when intent can be signaled clearly.
 
 
 ## Lazy Expressions (Default Value Expressions) ##
