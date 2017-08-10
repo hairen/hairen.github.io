@@ -6,14 +6,19 @@
 * While not a hard-and-fast rule, I'd say that the readability gains from => arrow function conversion are inversely proportional to the length of the function being converted. The longer the function, the less => helps; the shorter the function, the more => can shine.
 * In addition to lexical this, arrow functions also have lexical arguments -- they don't have their own arguments array but instead inherit from their parent -- as well as lexical super and new.target.
 
+
 ## Block Scope ##
 * The behavior of the const keyword in JavaScript varies slightly from other languages. Const prevents a variable from being reassigned. However, complex data types like arrays and objects could still be mutated.
+* Assigning an object or array as a constant means that value will not be able to be garbage collected until that constant's lexical scope goes away, as the reference to the value can never be unset. 
+
 
 ## Lazy Expressions (Default Value Expressions) ##
 * A default value could be in the form of a function call. This would be a lazy expressions because the function would not be called until it’s needed.
 
+
 ## Gather & Spread ##
 * Only data types that have an iterator can be spread.
+
 
 ## Destructuring ##
 * Not Just Declarations  
@@ -30,8 +35,10 @@ console.log( x, y, z );				// 4 5 6
 
 For the object destructuring form specifically, when leaving off a var/let/const declarator, we had to surround the whole assignment expression in ( ), because otherwise the { .. } on the lefthand side as the first element in the statement is taken to be a block statement instead of an object.
 
+
 ## Object Literal Extensions ##
 * You should only use concise methods if you're never going to need them to do recursion or event binding/unbinding.
+
 
 ## For..Of vs Foo ..In loop ##
 * **for..in** loops over the keys/indexes in the a array, while **for..of** loops over the values in a array.
@@ -41,6 +48,10 @@ For the object destructuring form specifically, when leaving off a var/let/const
   * Generators
   * Collections / TypedArrays
 * **for..of** loops can be prematurely stopped, just like other loops, with _break_, _continue_, _return_ (if in a function), and _thrown exceptions_.
+
+
+
+
 
 # Helpful Git Commands #
 ## Checking Out and Testing Pull Requests ##
