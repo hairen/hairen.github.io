@@ -52,6 +52,15 @@ For the object destructuring form specifically, when leaving off a var/let/const
 
 
 
+# Scope & Closures Learning Note
+*Resource*: [You don't Know JS](https://github.com/getify/You-Dont-Know-JS/blob/master/scope%20&%20closures/README.md#you-dont-know-js-scope--closures)
+
+## What is Scope?
+* *Scope* is set of rules about definding variables, where to store and find them at a later time.
+* JS is a compiled project, but it's _not_ well compiled as other traditionally-compiled languages.
+* For JavaScript, the compilation that occurs happens, in many cases, mere microseconds (or less!) before the code is executed. 
+
+
 
 # Helpful Git Commands #
 ## Checking Out and Testing Pull Requests ##
