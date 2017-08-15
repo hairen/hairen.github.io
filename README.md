@@ -59,7 +59,9 @@ For the object destructuring form specifically, when leaving off a var/let/const
 * *Scope* is set of rules about definding variables, where to store and find them at a later time.
 * JS is a compiled project, but it's _not_ well compiled as other traditionally-compiled languages.
 * For JavaScript, the compilation that occurs happens, in many cases, mere microseconds (or less!) before the code is executed. 
-* Two mechanisms in JavaScript can "cheat" lexical scope: _eval(..)_ and _with_.
+* Two mechanisms in JavaScript can "cheat" lexical scope: _eval(..)_ and _with_. The former can modify existing lexical scope (at runtime) by evaluating a string of "code" which has one or more declarations in it. The latter essentially creates a whole new lexical scope (again, at runtime) by treating an object reference as a "scope" and that object's properties as scoped identifiers.
+  
+  The downside to these mechanisms is that it defeats the Engine's ability to perform compile-time optimizations regarding scope look-up, because the Engine has to assume pessimistically that such optimizations will be invalid. Code will run slower as a result of using either feature. Don't use them.
 
 
 # Helpful Git Commands #
