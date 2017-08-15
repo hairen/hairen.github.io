@@ -59,7 +59,7 @@ For the object destructuring form specifically, when leaving off a var/let/const
 * *Scope* is set of rules about definding variables, where to store and find them at a later time.
 * JS is a compiled project, but it's _not_ well compiled as other traditionally-compiled languages.
 * For JavaScript, the compilation that occurs happens, in many cases, mere microseconds (or less!) before the code is executed. 
-
+* Two mechanisms in JavaScript can "cheat" lexical scope: _eval(..)_ and _with_.
 
 
 # Helpful Git Commands #
