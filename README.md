@@ -63,6 +63,12 @@ For the object destructuring form specifically, when leaving off a var/let/const
   
   The downside to these mechanisms is that it defeats the Engine's ability to perform compile-time optimizations regarding scope look-up, because the Engine has to assume pessimistically that such optimizations will be invalid. Code will run slower as a result of using either feature. Don't use them.
 
+## Named Function Expressions: Benefits
+* Handy function self-reference
+* More debuggable stack traces
+* More self-documenting code
+
+
 
 # Helpful Git Commands #
 ## Checking Out and Testing Pull Requests ##
