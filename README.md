@@ -68,6 +68,11 @@ For the object destructuring form specifically, when leaving off a var/let/const
 * More debuggable stack traces
 * More self-documenting code
 
+## Hoisting
+* Both function declarations and variable declarations are hoisted. But, functions are hosted _**first**_, and then variables.
+* It's probably best to avoid declaring functions in blocks.
+* Declarations themselves are hoisted, but assignments, even assignments of function expressions, are not hoisted.
+
 
 
 # Helpful Git Commands #
