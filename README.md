@@ -73,7 +73,8 @@ For the object destructuring form specifically, when leaving off a var/let/const
 * It's probably best to avoid declaring functions in blocks.
 * Declarations themselves are hoisted, but assignments, even assignments of function expressions, are not hoisted.
 
-
+## Closure
+* Definition: Closure is when a function "remember" its lexical scope even when the function is executed outside that lexical scope.
 
 # Helpful Git Commands #
 ## Checking Out and Testing Pull Requests ##
