@@ -77,8 +77,11 @@ For the object destructuring form specifically, when leaving off a var/let/const
 * Definition: Closure is when a function "remember" its lexical scope even when the function is executed outside that lexical scope.
 
 ## Object-Orienting
+* `this` is neither a reference to the _function itself_, nor is it a reference to the _function's lexical scope_.
+* `this` is actually a binding that is made when a function is invoked, and _what_ it references is determined entirely by the call-site where the function is called.
 * Every function, while it's executing, has a reference to its current execution context call "`this`". The "`this`" reference is JavaScript's version of dynamic scrop.
 * `this` is determined by how function is called.
+
 
 # Helpful Git Commands #
 ## Checking Out and Testing Pull Requests ##
