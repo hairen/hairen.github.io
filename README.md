@@ -76,6 +76,10 @@ For the object destructuring form specifically, when leaving off a var/let/const
 ## Closure
 * Definition: Closure is when a function "remember" its lexical scope even when the function is executed outside that lexical scope.
 
+## Object-Orienting
+* Every function, while it's executing, has a reference to its current execution context call "`this`". The "`this`" reference is JavaScript's version of dynamic scrop.
+* `this` is determined by how function is called.
+
 # Helpful Git Commands #
 ## Checking Out and Testing Pull Requests ##
 * Fetch all pull request branches  
