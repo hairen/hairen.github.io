@@ -81,6 +81,12 @@ For the object destructuring form specifically, when leaving off a var/let/const
 * `this` is actually a binding that is made when a function is invoked, and _what_ it references is determined entirely by the call-site where the function is called.
 * Every function, while it's executing, has a reference to its current execution context call "`this`". The "`this`" reference is JavaScript's version of dynamic scrop.
 * `this` is determined by how function is called.
+* Determining the _this_ binding for an executing function requires finding the direct call-site of that function.
+  1. Called with `new`? Use the newly constructed object.
+  2. Called with `call` or `apply` (or `bind`)? Use the specified object.
+  3. Called with a context object owning the call? Use that context object.
+  4. Default: `undefined` in `strict mode`, global object otherwise.
+* Instead of the four standard binding rules, ES6 arrow-functions use lexical scoping for `this` binding, which means they adopt the `this` binding (whatever it is) from its enclosing function call. They are essentially a syntactic replacement of `self = this` in pre-ES6 coding.
 
 
 # Helpful Git Commands #
