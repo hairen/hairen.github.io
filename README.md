@@ -88,6 +88,9 @@ For the object destructuring form specifically, when leaving off a var/let/const
   4. Default: `undefined` in `strict mode`, global object otherwise.
 * Instead of the four standard binding rules, ES6 arrow-functions use lexical scoping for `this` binding, which means they adopt the `this` binding (whatever it is) from its enclosing function call. They are essentially a syntactic replacement of `self = this` in pre-ES6 coding.
 
+## Prototype
+* A `constructor` makes an object _linked to_ its own prototype.
+* In JavaScript, every object is built by a constructor function and does not mean classes are being instanitate. When a constructor function is called, a new object is created with a link to the object's prototype.
 
 # Helpful Git Commands #
 ## Checking Out and Testing Pull Requests ##
