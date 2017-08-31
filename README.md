@@ -92,6 +92,10 @@ For the object destructuring form specifically, when leaving off a var/let/const
 * A `constructor` makes an object _linked to_ its own prototype.
 * In JavaScript, every object is built by a constructor function and does not mean classes are being instanitate. When a constructor function is called, a new object is created with a link to the object's prototype.
 
+## Type
+* `undefined`, `string`, `number`, `boolean`, `Object` are build-in types in Javascript. `symbol` is added in ES6. `function` is a subtype of the `object` type.
+* `NaN` means number conversion failed.
+
 # Helpful Git Commands #
 ## Checking Out and Testing Pull Requests ##
 * Fetch all pull request branches  
