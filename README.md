@@ -95,6 +95,19 @@ For the object destructuring form specifically, when leaving off a var/let/const
 ## Type
 * `undefined`, `string`, `number`, `boolean`, `Object` are build-in types in Javascript. `symbol` is added in ES6. `function` is a subtype of the `object` type.
 * `NaN` means number conversion failed.
+* There is a original bug in _typof null_. 
+  ```javascript
+    typeof null === "object"; // true
+  ```
+  If you want to test for a `null` value using its type, you need a compound condition:
+  ```javascript
+    var a = null;
+
+    (!a && typeof a === "object"); // true
+  ```
+* Function it's actually a "subtype" of object. Specifically, a function is referred to as a "callable object" -- an object that has an internal `[[Call]]` property that allows it to be invoked.
+* If you use `typeof` against a variable, it's not asking "what's the type of the vaiable?" as it may seem, since JS variables have no types. Instead, it's asking "what's the type of the value _in_ the variable?"
+
 
 # Helpful Git Commands #
 ## Checking Out and Testing Pull Requests ##
