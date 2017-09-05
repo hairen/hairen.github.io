@@ -117,7 +117,50 @@ For the object destructuring form specifically, when leaving off a var/let/const
   ```
   The `typeof` operator returns `"undefined"` even for "undeclared" (or "not defined") variables. Notice that there was no error thrown when we executed `typeof b`, even though `b` is an undeclared variable. This is a special safety guard in the behavior of `typeof`.
 
+## Value
+### Arrays
+* Generally, it's not a great idea to add `string` keys/properties to arrays. Use `object`s for holding values in keys/properties, and save `array`s for strictly numerically indexed values.
+  See the following snippet:
+  ```javascript
+  var a = [ ];
 
+  a["13"] = 42;
+
+  a.length; // 14
+  ```
+### Array-Likes
+* There will be occasions where you need to convert an `array`-like value (a numerically indexed collection of values) into a true `array`. One very common way to make such a conversion is to borrow the `slice(..)`utility against the value:
+  ```javascript
+  function foo() {
+	  var arr = Array.prototype.slice.call( arguments );
+    arr.push( "bam" );
+    console.log( arr );
+  }
+
+  foo( "bar", "baz" ); // ["bar","baz","bam"]
+  ```
+* As of ES6, there's also a built-in utility called `Array.from()` that can do the same task:
+  ```javascript
+  var arr = Array.from( arguments );
+  ```
+### Value vs.Reference
+* Let's illustrate:
+  ```javascript
+  var a = 2;
+  var b = a; // `b` is always a copy of the value in `a`
+  b++;
+  a; // 2
+  b; // 3
+
+  var c = [1,2,3];
+  var d = c; // `d` is a reference to the shared `[1,2,3]` value
+  d.push( 4 );
+  c; // [1,2,3,4]
+  d; // [1,2,3,4]
+  ```
+  Simple values (aka scalar primitives) are always assigned/passed by _value-copy_: `null`, `undefined`, `string`, `number`, `boolean`, and ES6's `symbol`.
+
+  Compound values -- objects (including `array`s, and all boxed object wrappers) and `function`s -- _always_ create a copy of the reference on assignment or passing. Refercens are not like references/pointers in other languages -- they're never pointed at other variables/references, only at the underlying values.
 
 # Helpful Git Commands #
 ## Checking Out and Testing Pull Requests ##
