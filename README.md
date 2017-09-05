@@ -107,6 +107,16 @@ For the object destructuring form specifically, when leaving off a var/let/const
   ```
 * Function it's actually a "subtype" of object. Specifically, a function is referred to as a "callable object" -- an object that has an internal `[[Call]]` property that allows it to be invoked.
 * If you use `typeof` against a variable, it's not asking "what's the type of the vaiable?" as it may seem, since JS variables have no types. Instead, it's asking "what's the type of the value _in_ the variable?"
+* There's also a special behavior associated with typeof as it relates to undeclared variables that even further reinforces the confusion. Consider:
+  ```javascript
+  var a;
+
+  typeof a; // "undefined"
+
+  typeof b; // "undefined"
+  ```
+  The `typeof` operator returns `"undefined"` even for "undeclared" (or "not defined") variables. Notice that there was no error thrown when we executed `typeof b`, even though `b` is an undeclared variable. This is a special safety guard in the behavior of `typeof`.
+
 
 
 # Helpful Git Commands #
