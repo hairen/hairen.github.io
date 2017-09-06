@@ -162,6 +162,43 @@ For the object destructuring form specifically, when leaving off a var/let/const
 
   Compound values -- objects (including `array`s, and all boxed object wrappers) and `function`s -- _always_ create a copy of the reference on assignment or passing. Refercens are not like references/pointers in other languages -- they're never pointed at other variables/references, only at the underlying values.
 
+### Natives
+* `new String("abc")` creates a string wrapper object around `"abc"`, not just the primitive `"abc"` value itself.
+* If you want to manually box a primitive value, you can use the `Object(..)` function (no `new` keyword):
+  ```javascript
+  var a = "abc";
+  var b = new String( a );
+  var c = Object( a );
+
+  typeof a; // "string"
+  typeof b; // "object"
+  typeof c; // "object"
+
+  b instanceof String; // true
+  c instanceof String; // true
+
+  Object.prototype.toString.call( b ); // "[object String]"
+  Object.prototype.toString.call( c ); // "[object String]"
+  ```
+* If you have an object wrapper and you want to get the underlying primitive value out, you can use the `valueOf()` method:
+  ```javascript
+  var a = new String( "abc" );
+  var b = new Number( 42 );
+  var c = new Boolean( true );
+
+  a.valueOf(); // "abc"
+  b.valueOf(); // 42
+  c.valueOf(); // true
+  ```
+* Unboxing can also happen implicitly, when using an object wrapper value in a way that requires the primitive value. This process (coercion) will be covered in more detail in Chapter 4, but briefly:
+  ```javascript
+  var a = new String( "abc" );
+  var b = a + ""; // `b` has the unboxed primitive value "abc"
+
+  typeof a; // "object"
+  typeof b; // "string"
+  ```
+
 # Helpful Git Commands #
 ## Checking Out and Testing Pull Requests ##
 * Fetch all pull request branches  
