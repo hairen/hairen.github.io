@@ -198,6 +198,16 @@ For the object destructuring form specifically, when leaving off a var/let/const
   typeof a; // "object"
   typeof b; // "string"
   ```
+### Implicit vs Explicit Coercion
+* Ask Yourself before using Double Equal:
+  1. Can either value be _true_ or _false_?
+  2. Can either value ever be _[]_, _""_, or _0_?
+
+### Double vs Triple Equal
+* `==` allows coercion
+* `===` disallows coercion
+* If the types compared are the same, _**they are identical**_. That is to say they use _**the exact same algorithm**_.
+If the types are different, then performance is irrelevant. Either you need type coercion, or you don't. If you don't need it, don't use `==` because the result you get may be unexpected.
 
 # Helpful Git Commands #
 ## Checking Out and Testing Pull Requests ##
