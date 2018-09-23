@@ -21,9 +21,40 @@
   + It will create a Virtual Private Gateway (VGW) but without an Elastic IP
   + It will create a VPN connection
 
+### Direct Connect (DX)
+> + It is a direct connection (**not internet based**) **and provides for higher speeds (bandwidth), less lantency and higher performance** than Internet.
+> + A Virtual Interface (VIF) is basically a 802.1Q VLAN mapped from the customer router to the Direct Conncet router.
+> + You need one private VIF to connect to your private VPC subnets, and one public VIF to connect your AWS public services.
+> + You can NOT establish layer 2 over your DX connection.
+> + You can NOT use a NAT instance /gatewya in your VPC over the direct connection connection.
+> + VPN will not provide bandwidth and latency guarantees.
+
+### AWS Console - Deleting a VPC
+> + When you launch a VPC with **public, VPN only subnets and a hardware VPN**, the following also gets created:
+>   + VGW
+>   + VPN connection is defined and created
+> + You can delete this VPC, everything will be deleted except VGW and VPM connection.
+>   + VGW will be detached from the VPC
+>   + VPN Connection will still be using the VGW
+
+### VPC Wizard Configurations
+> + Target "ALL" is not a valid Target for Route tables.
+> + This is the entry that is created by default in "any" route table to allow VPC subnets to communicate with one another.
+> + The VPC will have an Internet Gateway (IGW) created and attached.
+> + The **custom route** table will have an empty pointing at the VPC IGW as a target for 0.0.0.0/0 for Internet Access.
+> + For VPC Wizard configuartions, when a public and private subnets are created, **two route tables** are created by AWS for you.
+  >>  - **Private** IPv4 subnet ---> **Main** VPC route table
+  >>  - **Public** IPv4 subnet ---> **Custom** route table
+
 
 ### **VPC Endpoint**
 Enables creation of a private connection between your VPC and another AWS service using its private IP Address. It currentl supports endpoints for **S3** and **Dynamo DB**.
+
+### NAT Instance as a Proxy
+> + NAT instance in VPC can be used with a public IP or Elastic IP address.
+> + Does a PAT function, so it can hide more than one device/EC2 instance behind it when the traffic is initiated from these instances behind the NAT instance.
+> + **NAT instance is a user responsibility and is not a managed AWS service (Unlike the NAT gateway).**
+> + NAT instances can be deployed accross AZ's independetly for HA. EC2 instances, in each AZ, on private subnets requiring NAT should be configured to use the local NAT instance in the respective AZ.
 
 
 ***
