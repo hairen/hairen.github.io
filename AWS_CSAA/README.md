@@ -12,7 +12,6 @@
 + In _**Custom**_ Group
   + All **outbound** traffic is **allowed** by default.
   + All **inbound** traffic is **denied by default** in a **Custom** security group.
-  + 
 
 ### Security Group - _Configurations_
 + Configuring a VPC using the VPC wizard that has a VPN-Only and VPN Access implies:
@@ -26,8 +25,8 @@
 > + A Virtual Interface (VIF) is basically a 802.1Q VLAN mapped from the customer router to the Direct Conncet router.
 > + You need one private VIF to connect to your private VPC subnets, and one public VIF to connect your AWS public services.
 > + You can NOT establish layer 2 over your DX connection.
-> + You can NOT use a NAT instance /gatewya in your VPC over the direct connection connection.
-> + VPN will not provide bandwidth and latency guarantees.
+> + You can NOT use a NAT instance /gateway in your VPC over the direct connection connection.
+> + VPN will **NOT** provide bandwidth and latency guarantees.
 
 ### AWS Console - Deleting a VPC
 > + When you launch a VPC with **public, VPN only subnets and a hardware VPN**, the following also gets created:
@@ -64,14 +63,39 @@
 + For private virtual interfaces, you need one private virtual interface for each VPC to connect to from the AWS Direct Connect connection, or you can use a Direct Connect gateway.
 
 
-### **VPC Endpoint**
-Enables creation of a private connection between your VPC and another AWS service using its private IP Address. It currentl supports endpoints for **S3** and **Dynamo DB**.
+### VPC Endpoint
+> + Enables creation of a private connection between your VPC and another AWS service using its private IP Address. It currentl supports endpoints for **S3** and **Dynamo DB**.
+> + Endpoints are supported within the **same region only**.You cannot create an endpoint between a VPC and a service in a different region.
+> + VPC endpoint always **takes precedence over** NAT Gateway or Internet Gateway. In the absence of VPC endpoint, request to S3 are routed to NAT Gateway or Internet Gateway **based on** their existence in route table.
+
+### VPC Endpoint Policies
+> + A VPC endpoint policy is an **IAM resource polic**y that you attach to an endpoint when you create or modify the endpoint. 
 
 ### NAT Instance as a Proxy
 > + NAT instance in VPC can be used with a public IP or Elastic IP address.
 > + Does a PAT function, so it can hide more than one device/EC2 instance behind it when the traffic is initiated from these instances behind the NAT instance.
 > + **NAT instance is a user responsibility and is not a managed AWS service (Unlike the NAT gateway).**
 > + NAT instances can be deployed accross AZ's independetly for HA. EC2 instances, in each AZ, on private subnets requiring NAT should be configured to use the local NAT instance in the respective AZ.
+
+### NAT Gateways
+> + You can use a network address translation (NAT) gateway to enable instances in a **private subnet** to connect to the internet or other AWS services, but **prevent the internet** from initiating a connection with those instances.
+> + NOT Support IPv6.
+> + Internet Gateway are **two-way** traffic.
+> + When creating NAT Gateway, there is an option to select subnet in which NAT Gateway will be created. This must be a public subnet which has a route to internet through internet Gateway. If a private subnet is selected when creating NAT Gateway, it cannot route traffic to internet and hence the requests would fail.
+> + NAT Gateway doesn't have **security groups**.
+
+### Route table
+> + Each subnet in your VPC **must be associated** with a route table.
+> + A subnet can only be associated with one route table at a time, but you can associate multiple subnets with the same route table.
+> + Any route table _local route_ **cannot** be **edited** or **deleted**.
+
+### Bastion Host
+> + Bastion hosts are instances that sit within your public subnet and are typically accessed using SSH or RDP.
+
+### VPC Flow Logs
+> + VPC Flow Logs is a feature that enables you to capture information about the IP traffic going to and from network interfaces in your VPC.
+> + Flow log data can be published to Amazon CloudWatch Logs and Amazon S3.
+> + After you've created a flow log, you can retrieve and view its data in the chosen destination.
 
 
 ***
