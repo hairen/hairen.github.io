@@ -46,6 +46,23 @@
   >>  - **Private** IPv4 subnet ---> **Main** VPC route table
   >>  - **Public** IPv4 subnet ---> **Custom** route table
 
+### Launching EC2 instances in a VPC
+> When launching an EC2 instance in a VPC you can:
+> + Leave it to AWS to select the best AZ for your EC2 instance
+> + Or, specify which AZ you want your EC2 instance launched in
+> + Also, you can leave it to AWS to assign an IP address for your instance
+> + Or, you can assign the IP Address (if you choose the subnet for the EC2 instance) in the subnet where you want to launch your EC2 instance
+
+### Designing VPC Subnets
++ TO configure an ELB to load balance to instances in a subnet in a specific AZ, the **ELB must have one _public_ subnet** defined for the ELB in that AZ.
++ Web instances that are being load balanced in an AZ can be on **public** or **private** subnets.
+
+### AWS Direct Connect Virtual Interface
++ You **must** create a **virtual interface** to begin using your AWS Direct Connect connection. 
++ You can create a **private virtual interface** to connect to your VPC, or you can create a **public virtual interface** to connect to AWS services that aren't in a VPC, such as Amazon S3 and Amazon Glacier.
++ You can configure **multiple virtual interfaces** on a single AWS Direct Connect connection.
++ For private virtual interfaces, you need one private virtual interface for each VPC to connect to from the AWS Direct Connect connection, or you can use a Direct Connect gateway.
+
 
 ### **VPC Endpoint**
 Enables creation of a private connection between your VPC and another AWS service using its private IP Address. It currentl supports endpoints for **S3** and **Dynamo DB**.
