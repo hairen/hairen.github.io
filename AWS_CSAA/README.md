@@ -72,7 +72,7 @@
 > + A VPC endpoint policy is an **IAM resource polic**y that you attach to an endpoint when you create or modify the endpoint. 
 
 ### NAT Instance as a Proxy
-> + NAT instance in VPC can be used with a public IP or Elastic IP address.
+> + NAT instance in **VPC** can be used with a public IP or Elastic IP address.
 > + Does a PAT function, so it can hide more than one device/EC2 instance behind it when the traffic is initiated from these instances behind the NAT instance.
 > + **NAT instance is a user responsibility and is not a managed AWS service (Unlike the NAT gateway).**
 > + NAT instances can be deployed accross AZ's independetly for HA. EC2 instances, in each AZ, on private subnets requiring NAT should be configured to use the local NAT instance in the respective AZ.
@@ -97,6 +97,29 @@
 > + Flow log data can be published to Amazon CloudWatch Logs and Amazon S3.
 > + After you've created a flow log, you can retrieve and view its data in the chosen destination.
 
+
+***
+## S3
+### Protact against accidental object deletion for data stored in AWS S3 bucket
++ Enable versioning on a bucket, it ensures that **delete markers** are introduced whenever anyone tries to delete any version.
++ Copying bucket contents into another bucket ensure you have a copy of your data.
++ Bucket policies can allow/deny certain users permissions on your buckets, sub-buckets, or objects.
+
+### Availability VS durablity in different types of S3
+| S3 types | Availability | Durablity |
+| ------ | ----------- | ----------- |
+| S3 standard storage class | %99.99 | %99.999999999 |
+| S3 Infrequent Access (S3-IA) | %99.9 | %99.999999999 |
+| S3 Reduced Redundancy storage class (S3-RRS) | %99.99 | %99.99 |
+| Glacier storage | No SLA or Availability guarantees | %99.999999999 |
+
+### Glacier
+> + Three archive retrieval methods can be used to restore archives from Glacier
+>   + Expedited
+>   + Standard
+>   + Bulk
+> + **Synchronous** Upload and **Asynchronous** Retrieval
+>  
 
 ***
 ## AWS API Gateway
