@@ -104,14 +104,18 @@
 + Enable versioning on a bucket, it ensures that **delete markers** are introduced whenever anyone tries to delete any version.
 + Copying bucket contents into another bucket ensure you have a copy of your data.
 + Bucket policies can allow/deny certain users permissions on your buckets, sub-buckets, or objects.
++ Files can be from 0Bytes to **5TB**.
++ There is **unlimited** storage.
++ Files are stored in **Buckets**.
++ S3 is a universal namespace. That is, **names must be unique globally**.
 
 ### Availability VS durablity in different types of S3
 | S3 types | Availability | Durablity |
 | ------ | ----------- | ----------- |
-| S3 standard storage class | %99.99 | %99.999999999 |
-| S3 Infrequent Access (S3-IA) | %99.9 | %99.999999999 |
-| S3 Reduced Redundancy storage class (S3-RRS) | %99.99 | %99.99 |
-| Glacier storage | No SLA or Availability guarantees | %99.999999999 |
+| S3 standard storage class | 99.99% | 99.999999999% |
+| S3 Infrequent Access (S3-IA) | 99.9 %| %99.999999999% |
+| S3 Reduced Redundancy storage class (S3-RRS) | 99.99% | 99.99% |
+| Glacier storage | No SLA or Availability guarantees | 99.999999999% |
 
 ### Glacier
 > + Three archive retrieval methods can be used to restore archives from Glacier
@@ -119,7 +123,50 @@
 >   + Standard
 >   + Bulk
 > + **Synchronous** Upload and **Asynchronous** Retrieval
->  
+
+### S3 Security
+> + You can use _access control mechanisms_ such as **bucket policies** and **Access Control Lists** (ACLs) to selectively grant permissons to users and groups of users.
+> + You can also securly upload/download your data to Amazon S3 via **SSL** endpoints using the HTTPS protocol, or by using **Server-Side Encryption (SSE)** or **Client-Side Encryption**.
+> + **Access log** records can be used for audit purposes and contain details about the request, such as the request type, the resources specified in the request, and the time and date the request was processed.
+> + By **AWS CloudTrail Data Events**, customers who need to capture IAM/user identity iinformation in their logs.
+
+### Options for encrypting data stored on Amazon S3
+> + **SSE-S3** : It's provides an intergated solution where Amazon handles key management and key protection using multiple layers of security.
+> + **SSE-C** : Enables you to leverage Amazon S3 to perform the encryption and decryption of your objects while retaining control of the keys used to encrypt objects.
+> + **SSE-KMS**: Enables you to use **AWS Key Management Service** (AWS KMS) to manage your encryption keys.
+> + **Using an encryption client library**: Such as the Amazon S3 Encryption Client, you retain control the keys and complete the encryption and decyption of objects client-side using an encryption library of your choice.
+
+### S3 bucket properties
++ Versioning
++ Server Access Logging
++ Static Web Hosting
++ Object-level logging
++ Tags
++ Transfer acceleration
++ Events
+
+### DELETE Object
++ The **DELETE operation** removes the null version (if there is one) of an object and inserts a **delete marker**, which becomes the current version of the object. If there isn't a null version, Amazon S3 does not remove any objects.
+
+### AWS Storage Gateway
+> + **File Gatway**: A file gateway supports a file interface into Amazon Simple Storage Service (Amazon S3) and combines a service and a virtual software appliance. 
+> + Volume Gateway: A volume gateway provides cloud-backed storage volumes that you can mount as Internet Small Computer System Interface (iSCSI) devices from your on-premises application servers. The gateway supports the following volume configurations:
+  + Cached volumes (frequently accessed data)
+  + Stored volumes (low-latency access)
+> + Tape Gateway: With a tape gateway, you can cost-effectively and durably **archive backup** data in Amazon **Glacier**. 
+
+### Amazon S3 Data Consistency Model
+> + Amazon S3 provides **read-after-write consistency** for **PUTS** of **new** objects in your S3 bucket in all regions with one caveat. 
+> + Amazon S3 offers **eventual consistency for overwrite PUTS and DELETES** in all regions.
+
+### Minimum and Maximum file sizes that can be stored in S3 respectively: **0 (not 1) Bytes** and **5 terabytes**
+
+### How Do I Undelete a Deleted S3 Object?
+> + To be able to undelete a deleted object, you must have **had versioning enabled** on the bucket that contains the object before the object was deleted.
+> + When you delete an object in a versioning-enabled bucket, all versions remain in the bucket and Amazon S3 creates a **delete marker for the object**. To undelete the object, you must delete this delete marker. 
+> + When versioning is enabled, a simple DELETE **cannot** permanently delete a object.
+> + To **permanently** delete versioned objects, you must use **DELETE** Object **versionID**.
+
 
 ***
 ## AWS API Gateway
