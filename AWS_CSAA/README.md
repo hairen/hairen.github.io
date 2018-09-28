@@ -99,6 +99,59 @@
 
 
 ***
+## EC2
+### EC2 Enhanced Networking
+> + Enhanced networking is **not** supported on **all** EC2 instances
+> + Enhanced networking does NOT cost extra
+> + Enhanced networking can be enabled on **Instance-store backed** or **EBS-backed EC2 instances**.
+> + Enhanced networking **requirements**:
+>   + Instances be launched from an **HVM AMI** (no PV)
+>   + Is ONLY supported **in a VPC**
+
+### EC2 - Placement Groups
+> + Is a feature that allows involved EC2 instances to communicate via **high bandwidth** and **low latency** connections within an AZ.
+> + Placement groups **must** have all instances in the **same** AZ (only one single)
+> + You can use **Enhanced networking instances** in **Placement groups**.
+> + A placement group is ideal for EC2 instances that require high network throughout and low latency across a single AZ.
+
+### EC2 - Bastion Host
+> + Bastion host needs to be deployed in a public subnet
+> + You can allow RDP or SSH or both based on the Windows or Linux instances you need to manage respectivly
+> + Bostion host can have an Elastic IPv4 address attached, or also can be accessed using the auto-assigned public IPv4.
+
+### EC2 Options
+> + On Demand: Fixed rate by hour (by the second) with no commitment.
+> + Reserved (Cheaper than ON Demand)
+> + Spot
+> + Dedicated Hosts: Physical EC2 server dedicated for you use. Dedicated Hosts can help you reduce costs by allowing you to use your existing server-bound software licenses.
+
+### SSD
++ General Purpose SSD - balances price and performance for a wide varity of workloads.
++ Provisioned IOPS SSD - Highest performance SSD volume for mission-critical low-latency or high-throughput workloads.
+  
+### Magnetic
++ Throughput Optimized HDD - Low cost HDD volume designed for frequently accessed, throughput-intensiv workloads.
++ Cold HDD - Lowest cost HDD volume designed for less frequently accessed workloads. (Cannot be a boot volume)
++ Magnetic - Previous Generation. Can be a boot volume.
+
+### Security Group
++ You **CANNOT** block **specific IP** addresses using **Security Groups**, instead use **Network Access Control Lists.**
++ You can specify allow rules, but not deny rules.
+
+### EBS vs Instance Store
+> + All AMIs are categorized as either backed by Amazon EBS or backed by instance store.
+> + For EBS Volumes: The root decice from an instance launched from the AMI is an Amazon EBS volume created from an Amazon EBS snapshot.
+> + For Instance Store Volumes: The root device for an instance launched from the AMI is an instance store volumne created from a template stored in Amazon S3.
+> + Instance Store Volumes are sometimes called **Ephemeral Storage**.
+> + Instance store volumes cannot be stopped. If the underlying host fails, you will lose your data.
+> + EBS backed instances can be stopped.You will not lose the data on this instance if it is stopped.
+> + You can REBOOT both, you will not lose your data.
+> + By default, boot ROOT volumes will be deleted on termination, however with EBS volumes, you can tell AWS to keep the root device volumne.
+> + EBS snapshohts are backed up to S3 in what manner? (Incrementally)
+> + By default EBS volumes are set to 'Delete on Termination', meaning they persist only if instructed.
+> 
++ 
+***
 ## S3
 ### Protact against accidental object deletion for data stored in AWS S3 bucket
 + Enable versioning on a bucket, it ensures that **delete markers** are introduced whenever anyone tries to delete any version.
