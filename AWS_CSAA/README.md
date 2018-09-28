@@ -125,6 +125,40 @@
 > + Spot
 > + Dedicated Hosts: Physical EC2 server dedicated for you use. Dedicated Hosts can help you reduce costs by allowing you to use your existing server-bound software licenses.
 
+### EC2 - Status Checks.
+> + Reboot assumes that instance is in running state and does not change the host. **'impaired'** means **host** is not working properly.
+> + If EC2 status checks detect a software or hardwar on the underlying host, it will make the instance(Guest EC2 instances) as **impaired**.
+> + For EBS backed instances **stopping and restarting** the instance will cause it to **launch on a new host**, which will fix the problem.
+> + For Instance-store backed instances, stopping the instance is not an option, and what you can do is to **re-launch** the instance, but first create an AMI snapshot (or use the last created AMI snapshot) to launch a new instance.
+
+### EC2 - ENIs
+> + An EC2 instance can have **two** (or **more**, it depends on intances family/type) ENIs in **two different subnets**.
+>   + They both and the EC2 instance MUST be in the same AZ.
+> + By default, network interfaces created "**automatically**" during EC2 instance launch by AWS console, are terminated when the instance is terminated.
+>   + **Does not include eth1** that you can add during launch (manually added).
+> + Network interfaces created by **CLI** are **"NOT" terminated** **automatically** when the EC2 instance terminates.
+
+### EC2 - Instance Access
+You have root access with **OpsWorks**, **EC2**, and **Elatic Bean Stalk**, **EMR**.
+
+### EC2 instance Immediate Termination
+Possible reasons that a launched instance immediately terminates are:
+> + The instance store-backed AMI you used to launch the instance is missing a required part.
+> + You're reached out your EBS volume limit
+> + An EBS snapshot is corrupt.
+
+### EC2 Troubleshooting
+> + **Connection Timeout Error**
+>   + Check if the instance is undergoing a **high CPU load**.
+> + **Host Key Not Found Error**
+>   + Check that the correct username for the instance AMI has been used in the SSH connection request.
+>   + Verify that the connect private way (.pem) file has been used for the connection.
+> + **Unprotected Private Key Error**
+>   + Verify that the private key has the right permissions.
+> + **Insufficient Capacity Error** (When you try to launch an instance or start a stopped instance)
+>   + There was no avaliable EC2 capacity to service your request.
+> 
+
 ### SSD
 + General Purpose SSD - balances price and performance for a wide varity of workloads.
 + Provisioned IOPS SSD - Highest performance SSD volume for mission-critical low-latency or high-throughput workloads.
