@@ -139,7 +139,16 @@
 > + Network interfaces created by **CLI** are **"NOT" terminated** **automatically** when the EC2 instance terminates.
 
 ### EC2 - Instance Access
-You have root access with **OpsWorks**, **EC2**, and **Elatic Bean Stalk**, **EMR**.
++ You have root access with **OpsWorks**, **EC2**, and **Elatic Bean Stalk**, **EMR**.
++ You could only add an IAM at the time you launch an instance.
+  + If you wanted to add an IAM role to a running instance, you could not do it.
++ Now you can add an IAM role to a running EC2 instance.
+  + So depending on the exam question choices:
+    + Create a new EC2 instance and add the IAM role at launch time.
+    + You can add the IAM role while the instance is running.
+  + But if you have both but need to select only one.
+    + I would choose the first one, create a new EC2 instance and add ..., because it will still stand true.
+    + Unless if you were asked to select (2), then I would choose both.
 
 ### EC2 instance Immediate Termination
 Possible reasons that a launched instance immediately terminates are:
@@ -157,7 +166,22 @@ Possible reasons that a launched instance immediately terminates are:
 >   + Verify that the private key has the right permissions.
 > + **Insufficient Capacity Error** (When you try to launch an instance or start a stopped instance)
 >   + There was no avaliable EC2 capacity to service your request.
-> 
+
+### EC2 - Termination Protection
+> + You **CAN** terminate instances  with termination protaction enabled.
+> + Initiate a shutdown from the Instance Operating System, and instruct AWS to treat it as a terminate.
+
+### EC2 - Reserved Instances
+> + You can **NOT** migrate RI instances between regions.
+> + They are** Instance Family** specific.
+> + They are used  to lower costs.
+> + They can have their scope modified from region (default) to AZ or the other way around.
+> + They can be used to launch AS Group instances or standalone ones.
+
+### EC2 - IAM roles
++ Basically IAM Roles allow EC2 instances, and applications on EC2 instances, **secure access to another AWS services** such as S3, SQS, SNS, DynamoDB, ...etc.
+  + This will avoid having to store secure access credentials on EC2 instances.
+
 
 ### SSD
 + General Purpose SSD - balances price and performance for a wide varity of workloads.
