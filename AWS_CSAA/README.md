@@ -207,8 +207,56 @@ Possible reasons that a launched instance immediately terminates are:
 > + By default, boot ROOT volumes will be deleted on termination, however with EBS volumes, you can tell AWS to keep the root device volumne.
 > + EBS snapshohts are backed up to S3 in what manner? (Incrementally)
 > + By default EBS volumes are set to 'Delete on Termination', meaning they persist only if instructed.
-> 
-+ 
+
+***
+## EBS
+### EBS Snapshots - Characteristics
+> + Snapshots are **region** specific.
+> + Snapshot of encrypted volumes are also encrypted.
+> + Creating an EBS volume from an encrypted snapshot will result it an encrypted volume
+
+### EBS Volume Access
+> + Snapshots are **not** stored under **customer's own S3 buckets**. But, when you create AMI from instance store, you can view it under customer's own S3 buckets.
+> + **EBS volume snapshots** are stored in S3 but **cannot be accessed directly**, you can access them **through EC2 API only**.
+> + EBS snapshots stored **incrementally**.
+> + EBS snapshots are **asynchronously** created (refers to the fact that **updates** or **changes** to snapshots do not have to happen immediately when the respective volume data changes)
+
+### Using Encrypted/Shared Volumes
++ When have an encrypted snapshot shared with you from another AWS account, and you are granted access permissions to the CMK key used to encrypted the snapshot, you are highly recommended to:
+  + Create a copy of the shared snapshot and re-encrypt, during the copy process, using a different CMK key of your own
+    + This will protect your access to the snapshot and created volume of it in case: 
+      + The key used to encrypt the original shared snapshot is compromised.
+      + OR, if the original snapshot owner revokes your rights to the original snapshot encryption key.
+
+### IOPS Performance - Instance Store vs. EBS
++ Use Instance Store instead of EBS-
+  + Instance store, although can not provide fro data persistence, but it can provide for **much higher IOPS** compared to, network attached, EBS storage.
+  + Remember that, Instance Store is the virtual hard disk space allocated to the instance on the local host.
+  + However, note that **not all** new AWS EC2 instance families/types support instance store.
+
+### EBS - Data Encruption at Rest
+> + EBS volume encryption is **NOT** supported on some but not all instance types.
+> + EBS volume encryption is **NOT** supported on Free tier instances.
+> + There are many ways you can encrypt data on an EBS volume at rest, while the volume is attached to an EC2 instance
+>   + Use 3rd party EBS volume (SSD or HDD) encryption tools.
+>   + Use encrypted EBS volumes
+>   + Use encryption at the OS Level (using data encryption plugins/drivers)
+>   + Encrypt data at the application level before storing it to the volume.
+>   + Use encrypted file system on top of the EBS volume.
+
+### EBS Access - during Snapshot process
++ You can take an EBS volume snapshot while the volume is on a running instance and in use.
+  + However, the snapshot will be taken from the data already written to your volume.
+    + Any data cached by OS or in memory will not be included.
++ For most accurate snapshot, detach the volume, take the snapshot then re-attach it.
+
+### EBS Data Encryption
+> + The actual encryption of data happens on the **EC2 instance**
+>   + Remember that the EBS volume is attached to **the EC2 instance over the AWS network**
+> + Since data gets encrypted on the EC2 instance, then instnace CPU power **may** or **may not** qualify it to run Encrypted volumes.
+>   + For example **T2 Micro instances** do not support encryption
+> + Given the above, data between an encrypted volume and EC2 instance is **encrypted in transit** (Encrypted on the EC2 insetance then move to EBS volume).
+
 ***
 ## S3
 ### Protact against accidental object deletion for data stored in AWS S3 bucket
