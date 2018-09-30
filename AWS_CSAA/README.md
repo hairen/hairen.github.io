@@ -258,6 +258,59 @@ Possible reasons that a launched instance immediately terminates are:
 > + Given the above, data between an encrypted volume and EC2 instance is **encrypted in transit** (Encrypted on the EC2 insetance then move to EBS volume).
 
 ***
+## ASG
+### EC2 Status Checks
++ By default, Auto Scaling uses EC2 status checks to determine the status of its launched instance.
+  + Any status other than "**running**" will cause the auto scaling process to mark the instance for replacement, terminate it, then launch a new one.
++ If AWS determines a hardware of software problem on a host, it will mark all instances with status "**impaired**" and schedule them for termination.
+
+### AS - Terminating Unhealthy Instances
++ For Rebalancing, a new instance is launched first then the one(s) causing the imbalance get terminated.
++ For unhealthy instances, Auto Scaling has to terminate the unhealthy first, the launch a new one.
+
+### Merging ASGs
++ To merge existing ASGs, one of them must be updated to span the set of AZs of all groups.
++ Then delete the remaining ASGs (**Except the one that spans all AZs**).
++ The final one (the one that represents the merge) must be one of the original ASGs not a new one.
+
+
+
+### ASG and ELB Troubleshooting
++ Auto Scaling Groups are specific to a **region**.
++ An **Auto Scaling group can be defined in multiple AZs and can scale out or in** in those AZs.
+
+### Dynamic (Event-based) Scaling
+> The follwing parameters can influence auto scaling decisions based on their values.
+> + The cool down timer
+>   + It controls the period of time after a scaling event has happened to the time another scaling event can be initiated (both scale out and scale in are affected).
+> + The frequency of the Cloud Watch alarm fetching the monitored object's data
+>   + The longer it is, the less potential scaling events, and vice versa.
+> + The alarm thresholds based on which a scale-out or scale-in events can be triggered
+>   + Lowering the thresholds may cause more scaling out, and increasing the thresholds may cause more scaling in.
+
+***
+## RDS
+### RDS
+> + Read replicas can be used to scale read operations performance, however:
+>   + They can not written to (except in MySQL and MariaDB release 5,6 and later).
+>   + You can create snapshots from read replicas.
+>   + Asynchronous replication happens from **Primary to read replicas**.
+> + AWS RDS is a fully managed service where you can't have access to the OS, or Instance since AWS takes care of all OS, DB, Patching ... etc.
+>   + You **only** have access to the **DB engine itself**. 
+> + In case of multiple read replicas (MySQL, MariaDB), Promoting one to a standalone DB instance does not affect the other read replicas, those will continue to read from the former primart (source DB instance).
+> + **MySQL** and **MariaDB** support read replicas of read replicas.
+> + All RDS database engines except MS SQL server can have RDS instance storage capacity up to **6GB**
+> + MS SQL DB engine can have storage capcity up to **4TB**
+> + Every DB instance has a weekly maintenance window, if you didn't specify one at the time you create the DB instance, AWS will choose one randomly for you (30 mins long).
+> + To keep automatic backups enabled, retention period must be set to a **non-zero** value.
+> + If you set retention period to zero, automatice backups are disabled, hence, point-in-time recovery which relies on automatic backups' presence, will not function as well.
+
+### RDS - AWARDS events
+> + You need to subscribe to Amazon **RDS events** in order to be notified when/if changes occur with a DB instance, DB cluster, DB snapshot, DB cluster snapshot, DB parameter group, or DB security group.
+> + You can also use **CloudWathc Alarms and events** to monitor certain metrics, and based on alarms or events take some actions (or notify using SNS).
+> + CloudTrail also logs all API calls made to the AWS RDS API.
+
+***
 ## S3
 ### Protact against accidental object deletion for data stored in AWS S3 bucket
 + Enable versioning on a bucket, it ensures that **delete markers** are introduced whenever anyone tries to delete any version.
