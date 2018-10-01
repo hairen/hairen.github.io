@@ -414,4 +414,30 @@ _**Controlling Access to an API in API Gateway**_
 > + Client-side SSL certificates
 > + Usage plans
 
+***
+## Lambda
+### Lambda - Event sources
++ AWS Lambda supports many AWS services as event sources.
++ **Event sources** maintain the event source mapping, except for the stream-based services (Amazon Kinesis Streams and Amazon DynamoDB streams).
+  + For the stream-based services, AWS Lambda maintains the event source mapping, and Lambda function performs polling.
++ **Event sources that aren't stream-based**
+  + If you create a Lambda function to process events from the event sources that aren't stream-based. Each published event it a unit work, in parallel, up to your account limits.
 
+***
+## Redshift
++ Support encrption of data "at rest" using hardware accelerated AES-256 bits
+  + By default, AWS Redshift takes care of encryption key management
+  + You can choose to manage your own keys through HSM (Hardware Security Modules), or AWS KMS (Key Management Service).
++ Support SSL Encryption in-transit between client applications and Redshift data warehouse cluster.
++ You cannot have direct access to your AWS Redshift cluster nodes, however, you can through the applications themselves.
++ Redshift can NOT ingest a large amount of data in real time (Kinesis can do this). 
+
+*** 
+## Kinesis
+Ad hoc query/analysis is a business intelligence process designed to answer a single, specific business question.
++ This allows for quicker response times when a business question comes up, which in turn should help the user respond to issues and make business decisions faster.
++ The produce of ad hoc analysis is typically a statistical model, analytic report, or other type of data summary.
++ Ad hoc analysis may be used to create a report that does not already exist, or drill deeper into a static report tot get details about accounts, transactions, or records.
++ Redshift is a columnar analytical data warehouse (analytical database).
+  + It isn't designed to be continuously loaded, rather, a small number of concurrent queries performing large scans of data.
+  + Not optimized for ad hoc querying.
