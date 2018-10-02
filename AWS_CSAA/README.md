@@ -441,3 +441,23 @@ Ad hoc query/analysis is a business intelligence process designed to answer a si
 + Redshift is a columnar analytical data warehouse (analytical database).
   + It isn't designed to be continuously loaded, rather, a small number of concurrent queries performing large scans of data.
   + Not optimized for ad hoc querying.
+
+***
+## Route 53
+### NS Records
+NS stands for Name Server records. They are used by Top Level Domain servers to direct traffic to the Content DNS server which contains the authoritative DNS records.
+
+### A Records
+AN "A" record is the fundamental type of DNS record. The "A" in A record stands for "Address". The A record is used by a computer to translate the name of the domain to an IP address.
+
+### TTL
+The length that a DNS record is cached on either the Resolving Server or the users own local PC is equal to the value of the "Time To Live" (TTL) in seconds. The lower the time to live, the faster changes to DNS records take to propagate throughout the internet.
+
+## CNAMES
+A Canoical(权威性) Name (CName) can be used to resolve one domain name to another. For example, you may have a mobile website with the domain name http://m.acloud.guru that is used for when users browse to your domain name on their mobile devices. You may also want the name http://mobile.acloud.guru to resolve to this same address.
+
+### Alias Records
++ Alias records are used to map resouce record sets in your hosted zone to Elastic Load Balancers, CloudFront distributions, or S3 buckets that are configured as websites.
++ Alias records work like a CNAME record in that you can map one DNS name (www.example.com) to another 'target' DNS name (elb1234.elb.amazonaws.com).
++ **Key difference** - A CNAME can't be used for naked domain names (zone apex record). You can't have a CNAME for http://acloud.guru, it must be either an A record or an Alias.
++ Given the choice, always choose an Alias Record **over** a CNAME.
