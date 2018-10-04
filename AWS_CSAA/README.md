@@ -458,3 +458,104 @@ A Canoical(权威性) Name (CName) can be used to resolve one domain name to ano
 + Alias records work like a CNAME record in that you can map one DNS name (www.example.com) to another 'target' DNS name (elb1234.elb.amazonaws.com).
 + **Key difference** - A CNAME can't be used for naked domain names (zone apex record). You can't have a CNAME for http://acloud.guru, it must be either an A record or an Alias.
 + Given the choice, always choose an Alias Record **over** a CNAME.
+
+***
+## ELB
+### ELB - _Monitoring_
+ELB monitoring can be achieved by:
+  + AWS Cloud Watch:
+    + AWS ELB service sends ELB metrics to cloud watch every "One minute"
+    + ELB service sends these metrics only if there are requests flowing through the ELB
+    + AWS Cloud Watch can be used to trigger an SNS notification if a threshold you define is reached
+  + Access logs:
+    + Disabled by default
+    + You can obtain request information such as requester, time of request, requester IP, request type ... etc.
+    + Optional (disabled by default), you can choose to store the access logs in an S3 bucket that you specify.
+    + You are not charged extra for enabling access logs
+      + You pay for S3 storage.
+    + You are not charged for data transfer of access logs from ELB to the S3 bucket.
+  + AWS Cloud Trail
+    + You can use it to capture all API calls for your ELB
+    + You can store these logs in an S3 bucket that your specify
+
+### HTTPS/SSL Security Policy
++ If you do not specify otherwise, AWS Elastic Load Balancing service will configure your ELB with the current/latest pre-defined security policy.
++ For Frontend (Client to ELB) [HTTPS/SSL]
+  + You can define your custom security policy or use the ELB pre-defined security policies.
++ For backend, encrypted, connections
+  + Pre-defined security policies are always used.
++ Server Order Preference
+  + If enabled (default for default security policies), the first match in the ELB cipher list with the Client list is used.
+
+### Session Affinity - ELB Sticky sessions
++ For application cookie sticky sessions:
+  + If the cookie did not expire, but the backend instance becomes unhealthy, the ELB will route the traffic to a new, healthy, instance and keep the session stickiness to the new instance, even if the former one comes back healthy again.
++ For ELB, duration based, cookie stickiness:
+  + If the backend instance to which a session was sticky, fails to becomes unhealthy, the ELB routes the new session/requests (that were stuck before) to a new, healthy, instance and the session is no longer a sticky one.
++ If the ELB is configured with session affinity (sticky sessions), it will continue to route the requests from the same clients to the same backend EC2 instances disregarding:
+  + How loaded these backend EC2 instances might be
+  + Whether there are new backend instances added to distribute the load.
+
+### Originator/Requester Details
++ To allow the backend EC2 (Web layer) Instances to know the originator/requester details including, source IP address and port, Destination IP address and port, you can:
+  + Enable Proxy Protocol for TCP/SSL Layer 4 listners as supported on the ELB
+  + Enable X-Forewaded-For headers for HTTP/HTTPS listeners on the ELB.
+
+### SSL Security Policy Components
++ SSL protools
+  + SSL or TLS, are crytographic protocols.
++ SSL Ciphers (a set of ciphers is called a cipher suite)
+  + Encryption algorithms
+  + SSL can use different ciphers to encrypt data
++ Server Order Preference
+  + If enabled, the first match in the ELB cipher list with the Client list is used.
+  + If disabled (Default), first match in the client cipher list with the ELB list is used.
+
+### ELB
++ By default, an ELB enabled to load balance among multiple AZs, will distribute the traffic among the AZ evenly, disregarding the number of registered backend EC2 instance in each AZ.
++ Enabling ELB cross zone load balacning (disabled by default) ensures that the ELB will distribute traffic among the multi AZ registered backend EC2 instances evently.
++ ELB is a Region specific AWS Service.
++ You can't load balance across regions using ELB alone.
++ All that it takes to enable an ELB in an AZ (in the same region as the ELB), is to enable a subnet for the ELB in that AZ.
+  + If the ELB is to function as internet-facing, the subnet must be a public subnet.
++ A stateless application, is an application that does not maintain the session state locally on its file system.
+  + Stateless applications are required to scale horizontally using ELBs and Auto scaling (adding/removing EC2 instances as the load increases/decreases and using ELB to distribute load).
+    + You can use DynamoDB (given its scalability) for storing detailed user session information (application writes to the DynamoDB table).
+    + And you can use EFS and S3 to store larger file uploads from the users, or interim batch processing results..etc
+    + You can also, in case the application has workflow steps that needs to be tracked, instead of saving this on the EC2 local files system (application), it is bettter to use SWF services to track the workflows.
++ Adding Auto Scaling group to the application web/app tier would have been a perfect plus to the architecture, but since it was included as an option, we selected the closet one the perfect solution.
+  + A perfect H.A solution that will avoid any single point of failure, for such a scenrio, would include:
+    + VPC (with properly configure sec groups and N ACLs) in AWS with IGW configured and attached.
+    + Two AZs in the same region (at least two).
+    + Public subnet(s) in each AZ, ELB defined on one of them to enable it to serve the AZ.
+    + Private subnet for the database tier (to protect it)
+    + Multi-AZ RDS or AWS managed DB engine
+    + Auto scaling defined in both AZs and configured to work with the ELB and EC2 instances.
++ Remeber, similar to Multi-AZ RDS, ELB when deployed it is redundant and what takes care of this is the AWS ELB Service itself.
+  + If you need to have an ELB in an H.A solution, you do not need to configure two seperate ELBs yourself to guarantee HA.
+    + AWS will take care of this.
+  + A scenario where you would need to configure two ELBs, is if you want to load balance in a different Region, thus you configure one ELB in each Region, and have Route53 do a load distribution (through DNS resolution policy/routing) between the two.
+
+### ELB - SSL Protocols
++ The ELB supports the following SSL protocols:
+  + TLS 1.0
+  + TLS 1.1
+  + TLS 1.2
+  + SSL 2.0
+  + It does not support TLS 1.3 or SSL 2.0 (which is deprecated).
+
+### ELB - Connection Draining
++ Is disabled by default
++ When enabled, the ELB when identifying unhealthy instances, it will wait for a period of 300 seconds (by default), for the in-flight sessions to this EC2 back end instance to complete
+  + If the in-flight sessions are not completed before the maximum time (300 seconds configurable between 1 - 3600 seconds), the ELB will force termination of these sessions.
+  + During the connection draining, the back end instance state will be "InService: Instance Deregistration Currently In Progress".
+  + AWS Auto-Scaling would also honour the connection draining setting for unhealthy instances.
+  
+### ELB - Pre-Warming
++ ELB Scaling
+  + The time required for the Elastic Load Balancing to detect the increase in traffic/load and scale (or add) more ELB nodes can take from 1 to 7 minutes according to traffic profile.
+    + ELB is not designed to queue request.
+      + It will return Error 503 (HTTP) if it can't handle the request, any requests above the ELB capacity will fail.
+    + ELB service can scale and keep up with traffic increase, if you traffic increases at 50% in step or linear form every 5 mins.
++ ELB Pre-Warm
+  + If your traffic increases faster than this, you need to contact AWS to pre-warm ELB nodes for your traffic needs.
