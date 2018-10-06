@@ -94,60 +94,59 @@ When launching an EC2 instance in a VPC you can:
   + Flow log data can be published to Amazon **CloudWatch** Logs and Amazon **S3**.
   + After you've created a flow log, you can retrieve and view its data in the chosen destination.
 
-
 ***
 ## EC2
-### EC2 Enhanced Networking
+### EC2 - _Enhanced Networking_
 > + Enhanced networking is **not** supported on **all** EC2 instances
-> + Enhanced networking does NOT cost extra
+> + Enhanced networking does **NOT** cost extra
 > + Enhanced networking can be enabled on **Instance-store backed** or **EBS-backed EC2 instances**.
 > + Enhanced networking **requirements**:
 >   + Instances be launched from an **HVM AMI** (no PV)
 >   + Is ONLY supported **in a VPC**
 
-### EC2 - Placement Groups
-> + Is a feature that allows involved EC2 instances to communicate via **high bandwidth** and **low latency** connections within an AZ.
+### EC2 - _Placement Groups_
+> + Is a feature that allows involved EC2 instances to communicate via **high bandwidth** and **low latency** connections **within an AZ**.
 > + Placement groups **must** have all instances in the **same** AZ (only one single)
 > + You can use **Enhanced networking instances** in **Placement groups**.
-> + A placement group is ideal for EC2 instances that require high network throughout and low latency across a single AZ.
+> + A placement group is ideal for EC2 instances that require **high network** throughout and **low latency** across **a single AZ**.
 
-### EC2 - Bastion Host
-> + Bastion host needs to be deployed in a public subnet
+### EC2 - _Bastion Host_
+> + Bastion host needs to be deployed in a **public** subnet
 > + You can allow RDP or SSH or both based on the Windows or Linux instances you need to manage respectivly
 > + Bostion host can have an Elastic IPv4 address attached, or also can be accessed using the auto-assigned public IPv4.
 
-### EC2 Options
+### EC2 - _Options_
 > + On Demand: Fixed rate by hour (by the second) with no commitment.
 > + Reserved (Cheaper than ON Demand)
 > + Spot
 > + Dedicated Hosts: Physical EC2 server dedicated for you use. Dedicated Hosts can help you reduce costs by allowing you to use your existing server-bound software licenses.
 
-### EC2 - Status Checks.
+### EC2 - _Status Checks_
 > + Reboot assumes that instance is in running state and does not change the host. **'impaired'** means **host** is not working properly.
 > + If EC2 status checks detect a software or hardwar on the underlying host, it will make the instance(Guest EC2 instances) as **impaired**.
 > + For EBS backed instances **stopping and restarting** the instance will cause it to **launch on a new host**, which will fix the problem.
-> + For Instance-store backed instances, stopping the instance is not an option, and what you can do is to **re-launch** the instance, but first create an AMI snapshot (or use the last created AMI snapshot) to launch a new instance.
+> + For Instance-store backed instances, stopping the instance is not an option, and what you can do is to **_re-launch_ the instance**, but first create an AMI snapshot (or use the last created AMI snapshot) to launch a new instance.
 
-### EC2 - ENIs
+### EC2 - _ENIs_
 > + An EC2 instance can have **two** (or **more**, it depends on intances family/type) ENIs in **two different subnets**.
->   + They both and the EC2 instance MUST be in the same AZ.
+>   + They both and the EC2 instance MUST be in the **same** AZ.
 > + By default, network interfaces created "**automatically**" during EC2 instance launch by AWS console, are terminated when the instance is terminated.
 >   + **Does not include eth1** that you can add during launch (manually added).
 > + Network interfaces created by **CLI** are **"NOT" terminated** **automatically** when the EC2 instance terminates.
 
 ### EC2 - Instance Access
-+ You have root access with **OpsWorks**, **EC2**, and **Elatic Bean Stalk**, **EMR**.
-+ You could only add an IAM at the time you launch an instance.
-  + If you wanted to add an IAM role to a running instance, you could not do it.
-+ Now you can add an IAM role to a running EC2 instance.
-  + So depending on the exam question choices:
-    + Create a new EC2 instance and add the IAM role at launch time.
-    + You can add the IAM role while the instance is running.
-  + But if you have both but need to select only one.
-    + I would choose the first one, create a new EC2 instance and add ..., because it will still stand true.
-    + Unless if you were asked to select (2), then I would choose both.
+> + You have root access with **OpsWorks**, **EC2**, and **Elatic Bean Stalk**, **EMR**.
+> + You could only add an IAM at the time you launch an instance.
+    + If you wanted to add an IAM role to a running instance, you could not do it.
+> + Now you can add an IAM role to a running EC2 instance.
+>    + So depending on the exam question choices:
+>      + Create a new EC2 instance and add the IAM role at launch time.
+>      + You can add the IAM role while the instance is running.
+>    + But if you have both but need to select only one.
+>    + I would choose the first one, create a new EC2 instance and add ..., because it will still stand true.
+>    + Unless if you were asked to select (2), then I would choose both.
 
-### EC2 instance Immediate Termination
+### EC2 - _instance Immediate Termination_
 Possible reasons that a launched instance immediately terminates are:
 > + The instance store-backed AMI you used to launch the instance is missing a required part.
 > + You're reached out your EBS volume limit
@@ -262,15 +261,13 @@ Possible reasons that a launched instance immediately terminates are:
 + If AWS determines a hardware of software problem on a host, it will mark all instances with status "**impaired**" and schedule them for termination.
 
 ### AS - Terminating Unhealthy Instances
-+ For Rebalancing, a new instance is launched first then the one(s) causing the imbalance get terminated.
-+ For unhealthy instances, Auto Scaling has to terminate the unhealthy first, the launch a new one.
++ For **Rebalancing**, a new instance is launched first then the one(s) causing the imbalance get terminated.
++ For **unhealthy instances**, Auto Scaling has to terminate the unhealthy first, the launch a new one.
 
 ### Merging ASGs
 + To merge existing ASGs, one of them must be updated to span the set of AZs of all groups.
 + Then delete the remaining ASGs (**Except the one that spans all AZs**).
-+ The final one (the one that represents the merge) must be one of the original ASGs not a new one.
-
-
++ The final one (the one that represents the merge) must be one of the original ASGs not a new one. 
 
 ### ASG and ELB Troubleshooting
 + Auto Scaling Groups are specific to a **region**.
@@ -284,6 +281,18 @@ Possible reasons that a launched instance immediately terminates are:
 >   + The longer it is, the less potential scaling events, and vice versa.
 > + The alarm thresholds based on which a scale-out or scale-in events can be triggered
 >   + Lowering the thresholds may cause more scaling out, and increasing the thresholds may cause more scaling in.
+
+### ASG - Launch Configuration via CLI
++ CLI enabled **detailed** monitoring, while AWS Console enabled **basic** monitoring by default.
+
+### Dynamic (Event-based) Scaling
++ The following parameters can influence auto scaling decisions based on their values
+  + The cool down timer
+    + It controls the period of time after a scaling event has happened to the time another scaling event can be initiated (both scale out and scale in are affected).
+  + The frequency of the Cloud Watch alarm fetching the monitored object's data
+    + The longer it is, the less potential scaling events, and vice versa.
+  + The alarm thresholds based on which a scale-out or scale-in events can be triggered.
+    + Lowering the thresholds may cause more scaling out, and increasing the thresholds may cause more scaling-in.
 
 ***
 ## RDS
@@ -301,11 +310,23 @@ Possible reasons that a launched instance immediately terminates are:
 > + Every DB instance has a weekly maintenance window, if you didn't specify one at the time you create the DB instance, AWS will choose one randomly for you (30 mins long).
 > + To keep automatic backups enabled, retention period must be set to a **non-zero** value.
 > + If you set retention period to zero, automatice backups are disabled, hence, point-in-time recovery which relies on automatic backups' presence, will not function as well.
+> + The promoted replica into a standaone DB instance will retain:
+>   + Backup retention period
+>   + Backup window
+>   + DB parameter group
+> + You can promote a read replica into a standalone / single AZ database instance
+>   + This is true for MySQL, MariaDB, PostgreSQL (MyMaPo)
+> + You can specify a point-in-time restore to any given second during the retentaion period.
+> + When you initiate a point-in-time recovery, transaction logs are applied to the most appropriate daily backup to restore your DB to that point-in-time.
 
 ### RDS - AWARDS events
 > + You need to subscribe to Amazon **RDS events** in order to be notified when/if changes occur with a DB instance, DB cluster, DB snapshot, DB cluster snapshot, DB parameter group, or DB security group.
 > + You can also use **CloudWathc Alarms and events** to monitor certain metrics, and based on alarms or events take some actions (or notify using SNS).
 > + CloudTrail also logs all API calls made to the AWS RDS API.
+
+### RDS - failover in Multi-AZ
++ How can you initate a manual failover from the RDS primary DB Instance to the Standby RDS DB instance in a multi-AZ RDS deployment in an AWS VPC?
+  + You need to initiate a reboot with a failover on the primary RDS instance.
 
 ***
 ## S3
