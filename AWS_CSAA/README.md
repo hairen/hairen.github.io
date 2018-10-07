@@ -206,52 +206,52 @@ When launching an EC2 instance in a VPC you can:
 
 ***
 ## EBS
-### EBS Snapshots - Characteristics
-> + Snapshots are **region** specific.
-> + Snapshot of encrypted volumes are also encrypted.
-> + Creating an EBS volume from an encrypted snapshot will result it an encrypted volume
+### EBS Snapshots - _Characteristics_
++ Snapshots are **region** specific.
++ Snapshot of encrypted volumes are also encrypted.
++ Creating an EBS volume from an encrypted snapshot will result it an encrypted volume
 
 ### EBS Volume Access
-> + Snapshots are **not** stored under **customer's own S3 buckets**. But, when you create AMI from instance store, you can view it under customer's own S3 buckets.
-> + **EBS volume snapshots** are stored in S3 but **cannot be accessed directly**, you can access them **through EC2 API only**.
-> + EBS snapshots stored **incrementally**.
-> + EBS snapshots are **asynchronously** created (refers to the fact that **updates** or **changes** to snapshots do not have to happen immediately when the respective volume data changes)
++ Snapshots are **not** stored under **customer's own S3 buckets**. But, when you create AMI from instance store, you can view it under customer's own S3 buckets.
++ **EBS volume snapshots** are stored in S3 but **cannot be accessed directly**, you can access them through **EC2 API only**.
++ EBS snapshots stored **incrementally**.
++ EBS snapshots are **asynchronously** created (refers to the fact that **updates** or **changes** to snapshots do not have to happen immediately when the respective volume data changes)
 
 ### Using Encrypted/Shared Volumes
 + When have an encrypted snapshot shared with you from another AWS account, and you are granted access permissions to the CMK key used to encrypted the snapshot, you are highly recommended to:
-  + Create a copy of the shared snapshot and re-encrypt, during the copy process, using a different CMK key of your own
-    + This will protect your access to the snapshot and created volume of it in case: 
+  + Create a copy of the shared snapshot and re-encrypt, during the copy process, using a **different** CMK key of your own
+    + This will protect your access to the snapshot and created volume of it in case:
       + The key used to encrypt the original shared snapshot is compromised.
       + OR, if the original snapshot owner revokes your rights to the original snapshot encryption key.
 
 ### IOPS Performance - Instance Store vs. EBS
-+ Use Instance Store instead of EBS-
-  + Instance store, although can not provide fro data persistence, but it can provide for **much higher IOPS** compared to, network attached, EBS storage.
++ Use Instance Store instead of EBS
+  + Instance store, although **can not** provide for **data persistence**, but it can provide for **much higher IOPS** compared to network attached, EBS storage.
   + Remember that, Instance Store is the virtual hard disk space allocated to the instance on the local host.
   + However, note that **not all** new AWS EC2 instance families/types support instance store.
 
-### EBS - Data Encruption at Rest
-> + EBS volume encryption is **NOT** supported on some but not all instance types.
-> + EBS volume encryption is **NOT** supported on Free tier instances.
-> + There are many ways you can encrypt data on an EBS volume at rest, while the volume is attached to an EC2 instance
->   + Use 3rd party EBS volume (SSD or HDD) encryption tools.
->   + Use encrypted EBS volumes
->   + Use encryption at the OS Level (using data encryption plugins/drivers)
->   + Encrypt data at the application level before storing it to the volume.
->   + Use encrypted file system on top of the EBS volume.
+### EBS - _Data Encruption at Rest_
++ EBS volume encryption is **NOT** supported on some but not all instance types.
++ EBS volume encryption is **NOT** supported on **Free tier instances**.
++ There are many ways you can encrypt data on an EBS volume at rest, while the volume is attached to an EC2 instance
+  + Use 3rd party EBS volume (SSD or HDD) encryption tools.
+  + Use encrypted EBS volumes
+  + Use encryption at the OS Level (using data encryption plugins/drivers)
+  + Encrypt data at the application level before storing it to the volume.
+  + Use encrypted file system on top of the EBS volume.
 
-### EBS Access - during Snapshot process
+### EBS Access - _During Snapshot Process_
 + You can take an EBS volume snapshot while the volume is on a running instance and in use.
   + However, the snapshot will be taken from the data already written to your volume.
-    + Any data cached by OS or in memory will not be included.
+    + Any data **cached by OS** or **in memory** will not be included.
 + For most accurate snapshot, detach the volume, take the snapshot then re-attach it.
 
-### EBS Data Encryption
-> + The actual encryption of data happens on the **EC2 instance**
->   + Remember that the EBS volume is attached to **the EC2 instance over the AWS network**
-> + Since data gets encrypted on the EC2 instance, then instnace CPU power **may** or **may not** qualify it to run Encrypted volumes.
->   + For example **T2 Micro instances** do not support encryption
-> + Given the above, data between an encrypted volume and EC2 instance is **encrypted in transit** (Encrypted on the EC2 insetance then move to EBS volume).
+### EBS _Data Encryption_
++ The actual encryption of data happens on the **EC2 instance**
+  + Remember that the EBS volume is attached to **the EC2 instance over the AWS network**
++ Since data gets encrypted on the EC2 instance, then instnace CPU power **may** or **may not** qualify it to run Encrypted volumes.
+  + For example **T2 Micro instances** do not support encryption
++ Given the above, data between an encrypted volume and EC2 instance is **encrypted in transit** (Encrypted on the EC2 insetance then move to EBS volume).
 
 ***
 ## ASG
@@ -260,27 +260,27 @@ When launching an EC2 instance in a VPC you can:
   + Any status other than "**running**" will cause the auto scaling process to mark the instance for replacement, terminate it, then launch a new one.
 + If AWS determines a hardware of software problem on a host, it will mark all instances with status "**impaired**" and schedule them for termination.
 
-### AS - Terminating Unhealthy Instances
-+ For **Rebalancing**, a new instance is launched first then the one(s) causing the imbalance get terminated.
-+ For **unhealthy instances**, Auto Scaling has to terminate the unhealthy first, the launch a new one.
+### AS - **Terminating Unhealthy Instances**
++ For **Rebalancing**, a **new instance** is launched **first** then the one(s) causing the imbalance get terminated.
++ For **Unhealthy instances**, Auto Scaling has to **terminate the unhealthy first**, the launch a new one.
 
 ### Merging ASGs
 + To merge existing ASGs, one of them must be updated to span the set of AZs of all groups.
 + Then delete the remaining ASGs (**Except the one that spans all AZs**).
-+ The final one (the one that represents the merge) must be one of the original ASGs not a new one. 
++ The final one (the one that represents the merge) must be one of the original ASGs not a new one.
 
 ### ASG and ELB Troubleshooting
 + Auto Scaling Groups are specific to a **region**.
 + An **Auto Scaling group can be defined in multiple AZs and can scale out or in** in those AZs.
 
-### Dynamic (Event-based) Scaling
-> The follwing parameters can influence auto scaling decisions based on their values.
-> + The cool down timer
->   + It controls the period of time after a scaling event has happened to the time another scaling event can be initiated (both scale out and scale in are affected).
-> + The frequency of the Cloud Watch alarm fetching the monitored object's data
->   + The longer it is, the less potential scaling events, and vice versa.
-> + The alarm thresholds based on which a scale-out or scale-in events can be triggered
->   + Lowering the thresholds may cause more scaling out, and increasing the thresholds may cause more scaling in.
+### Dynamic (_Event-based_) Scaling
+The follwing parameters can influence auto scaling decisions based on their values.
++ **The cool down timer**
+  + It controls **the period of time** after a scaling event has happened to the time another scaling event can be initiated (both scale out and scale in are affected).
++ The **frequency of the Cloud Watch alarm fetching** the monitored object's data
+  + The longer it is, the less potential scaling events, and vice versa.
++ The **alarm thresholds** based on which a scale-out or scale-in events can be triggered
+  + Lowering the thresholds may cause more scaling out, and increasing the thresholds may cause more scaling in.
 
 ### ASG - Launch Configuration via CLI
 + CLI enabled **detailed** monitoring, while AWS Console enabled **basic** monitoring by default.
@@ -297,19 +297,53 @@ When launching an EC2 instance in a VPC you can:
 ***
 ## RDS
 ### RDS
++ RDS is web service that makes it earier to setup, operate, and scale a **relational database **in the cloud.
+
+### RDS - Features & benefits
+> + CPU, memory, storage, and IOPS can be scaled independently.
+> + Manages backups, software patching, automatic failure detection, and recovery.
+> + Automated backups can be performed as needed, or manual backups can be triggered as well. Backups can be used to restore a database, and the RDS restore process works reliably and efficiently.
+> + Provides high availability with a primary instance and a synchronous secondary instance that can be failovered to seamlessly when a problem occurs.
+> + Provides elasticity & scalability by enabling MySQL, MariaDB, or PostgreSQL Read Replicas to increase read scaling.
+> + Supports MySQL, MariaDB, PostgreSQL, Oracle, Microsoft SQL Server, and the new, MySQL-compatible Amazon Aurora DB engine.
+> + In addition to the security in the database package, IAM users and permissions can help to control who has access to the RDS databases.
+> + Databases can be further protected by putting them in a VPC, using SSL for data in transit and encryption for data in rest
+> + However, as it is a managed service, shell (root ssh) access to DB instances is not provided, and this restricts access to certain system procedures and tables that require advanced privileges.
+
+### RDS - _DB Instance_
+> + is a basic building block of RDS
+> + is an isolated database environment in the cloud
+> + each DB instance runs a DB engine. AWS currently supports MySQL, MariaDB, PostgreSQL, Oracle, and Microsoft SQL Server & Aurora DB engines
+> + can be accessed from Amazon AWS command line tools, Amazon RDS APIs, or the AWS Management RDS Console.
+> + computation and memory capacity of an DB instance is determined by its DB instance class, which can be selected as per the needs.
+> + for each DB instance, 5 GB to 6 TB of associated storage capacity can be selected.
+> + storage comes in three types: Magnetic, General Purpose (SSD), and Provisioned IOPS (SSD), which differ in performance characteristics and price.
+> + each DB instance has a DB instance identifier, which is customer-supplied name and must be unique for that customer in an AWS region. It uniquely identifies the DB instance when interacting with the Amazon RDS API and AWS CLI commands.
+> + each DB instance can host multiple databases, or a single Oracle database with multiple schemas.
+> + can be hosted in an AWS VPC environment for better control
+
+
+
+### RDS - _Multi-AZ & Read replicas_
+DB instance replicas can be created in two ways **Multi-AZ** and **Read Replica**
+#### Multi-AZ deployment
+> + It provides **high availability and failover** support.
+> + RDS automatically provisions and manages a synchronous standby replica in a different AZ.
+> + RDS automatically fails over to the standby.
+
+#### Read Replica
 > + Read replicas can be used to scale read operations performance, however:
 >   + They can not written to (except in MySQL and MariaDB release 5,6 and later).
 >   + You can create snapshots from read replicas.
 >   + Asynchronous replication happens from **Primary to read replicas**.
-> + AWS RDS is a fully managed service where you can't have access to the OS, or Instance since AWS takes care of all OS, DB, Patching ... etc.
->   + You **only** have access to the **DB engine itself**. 
+>   + You **only** have access to the **DB engine itself**.
 > + In case of multiple read replicas (MySQL, MariaDB), Promoting one to a standalone DB instance does not affect the other read replicas, those will continue to read from the former primart (source DB instance).
 > + **MySQL** and **MariaDB** support read replicas of read replicas.
-> + All RDS database engines except MS SQL server can have RDS instance storage capacity up to **6GB**
-> + MS SQL DB engine can have storage capcity up to **4TB**
+> + All RDS database engines except **MS SQL server** can have RDS instance storage capacity up to **6GB**
+> + **MS SQL DB engine** can have storage capcity up to **4TB**
 > + Every DB instance has a weekly maintenance window, if you didn't specify one at the time you create the DB instance, AWS will choose one randomly for you (30 mins long).
 > + To keep automatic backups enabled, retention period must be set to a **non-zero** value.
-> + If you set retention period to zero, automatice backups are disabled, hence, point-in-time recovery which relies on automatic backups' presence, will not function as well.
+> + If you set **retention period to zero**, automatice backups are **disabled**, hence, point-in-time recovery which relies on automatic backups presence, will not function as well.
 > + The promoted replica into a standaone DB instance will retain:
 >   + Backup retention period
 >   + Backup window
@@ -320,20 +354,35 @@ When launching an EC2 instance in a VPC you can:
 > + When you initiate a point-in-time recovery, transaction logs are applied to the most appropriate daily backup to restore your DB to that point-in-time.
 
 ### RDS - AWARDS events
-> + You need to subscribe to Amazon **RDS events** in order to be notified when/if changes occur with a DB instance, DB cluster, DB snapshot, DB cluster snapshot, DB parameter group, or DB security group.
-> + You can also use **CloudWathc Alarms and events** to monitor certain metrics, and based on alarms or events take some actions (or notify using SNS).
-> + CloudTrail also logs all API calls made to the AWS RDS API.
++ You need to subscribe to Amazon **RDS events** in order to be notified when/if changes occur with a DB instance, DB cluster, DB snapshot, DB cluster snapshot, DB parameter group, or DB security group.
++ You can also use **CloudWatch Alarms and events** to monitor certain metrics, and based on alarms or events take some actions (or notify using SNS).
++ **CloudTrail** also logs all API calls made to the AWS RDS API.
 
 ### RDS - failover in Multi-AZ
 + How can you initate a manual failover from the RDS primary DB Instance to the Standby RDS DB instance in a multi-AZ RDS deployment in an AWS VPC?
   + You need to initiate a reboot with a failover on the primary RDS instance.
 
+### Adding Storage and Changing Storage Type
++ DB instance can be modified to use additional storage and converted to a different storage type.
++ However, storage allocated for a DB instance **cannot be decreased**.
+
+### RDS DB instance Maintenance and Upgrades
++ Multi-AZ deployment for the DB instance reduces the impact of a maintenance event by following these steps:
+  + Perform maintenance on the standby.
+  + Promote the standby to primary.
+  + Perform maintenance on the old primary, which becomes the new standby.
+
+### RDS - _Monitoring & Notification_
++ RDS integrates with CloudWatch and provides metrics for monitoring
++ CloudWatch alarms can be created over a sinfle metric that sends an SNS message when the alarm changes state.
++ RDS also provides SNS notification when any RDS event occurs.
+
 ***
 ## S3
 ### Protact against accidental object deletion for data stored in AWS S3 bucket
-+ Enable versioning on a bucket, it ensures that **delete markers** are introduced whenever anyone tries to delete any version.
++ Enable **versioning** on a bucket, it ensures that **delete markers** are introduced whenever anyone tries to delete any version.
 + Copying bucket contents into another bucket ensure you have a copy of your data.
-+ Bucket policies can allow/deny certain users permissions on your buckets, sub-buckets, or objects.
++ **Bucket policies** can allow/deny certain users permissions on your buckets, sub-buckets, or objects.
 + Files can be from 0Bytes to **5TB**.
 + There is **unlimited** storage.
 + Files are stored in **Buckets**.
@@ -343,34 +392,34 @@ When launching an EC2 instance in a VPC you can:
 | S3 types | Availability | Durablity |
 | ------ | ----------- | ----------- |
 | S3 standard storage class | 99.99% | 99.999999999% |
-| S3 Infrequent Access (S3-IA) | 99.9 %| %99.999999999% |
+| S3 Infrequent Access (S3-IA) | 99.9 %| 99.999999999% |
 | S3 Reduced Redundancy storage class (S3-RRS) | 99.99% | 99.99% |
 | Glacier storage | No SLA or Availability guarantees | 99.999999999% |
 
 ### Glacier
-> + Three archive retrieval methods can be used to restore archives from Glacier
->   + Expedited
->     + More expensive
->     + Use for urgent requests only.
->   + Standard
->     + Less expensive than Expedited
->     + You get 10GB data retrieval free/month
->   + Bulk
->     + Cheapest
->     + Use to retrieve large amounts up to Petabytes in a day.
-> + **Synchronous** Upload and **Asynchronous** Retrieval
++ Three archive retrieval methods can be used to restore archives from Glacier
+  + Expedited
+    + More expensive
+    + Use for urgent requests only.
+  + Standard
+    + Less expensive than Expedited
+    + You get 10GB data retrieval free/month
+  + Bulk
+    + Cheapest
+    + Use to retrieve large amounts up to Petabytes in a day.
++ **Synchronous** Upload and **Asynchronous** Retrieval
 
 ### S3 Security
-> + You can use _access control mechanisms_ such as **bucket policies** and **Access Control Lists** (ACLs) to selectively grant permissons to users and groups of users.
-> + You can also securly upload/download your data to Amazon S3 via **SSL** endpoints using the HTTPS protocol, or by using **Server-Side Encryption (SSE)** or **Client-Side Encryption**.
-> + **Access log** records can be used for audit purposes and contain details about the request, such as the request type, the resources specified in the request, and the time and date the request was processed.
-> + By **AWS CloudTrail Data Events**, customers who need to capture IAM/user identity iinformation in their logs.
++ You can use _access control mechanisms_ such as **bucket policies** and **Access Control Lists** (ACLs) to selectively grant permissons to users and groups of users.
++ You can also securly upload/download your data to Amazon S3 via **SSL** endpoints using the HTTPS protocol, or by using **Server-Side Encryption (SSE)** or **Client-Side Encryption**.
++ **Access log** records can be used for audit purposes and contain details about the request, such as the request type, the resources specified in the request, and the time and date the request was processed.
++ By **AWS CloudTrail Data Events**, customers who need to capture IAM/user identity iinformation in their logs.
 
 ### Options for encrypting data stored on Amazon S3
-> + **SSE-S3** : It's provides an intergated solution where Amazon handles key management and key protection using multiple layers of security.
-> + **SSE-C** : Enables you to leverage Amazon S3 to perform the encryption and decryption of your objects while retaining control of the keys used to encrypt objects.
-> + **SSE-KMS**: Enables you to use **AWS Key Management Service** (AWS KMS) to manage your encryption keys.
-> + **Using an encryption client library**: Such as the Amazon S3 Encryption Client, you retain control the keys and complete the encryption and decyption of objects client-side using an encryption library of your choice.
++ **SSE-S3** : It's provides an intergated solution where Amazon handles key management and key protection using multiple layers of security.
++ **SSE-C** : Enables you to leverage Amazon S3 to perform the encryption and decryption of your objects while retaining control of the keys used to encrypt objects.
++ **SSE-KMS**: Enables you to use **AWS Key Management Service** (AWS KMS) to manage your encryption keys.
++ **Using an encryption client library**: Such as the Amazon S3 Encryption Client, you retain control the keys and complete the encryption and decyption of objects client-side using an encryption library of your choice.
 
 ### S3 bucket properties
 + Versioning
@@ -385,24 +434,23 @@ When launching an EC2 instance in a VPC you can:
 + The **DELETE operation** removes the null version (if there is one) of an object and inserts a **delete marker**, which becomes the current version of the object. If there isn't a null version, Amazon S3 does not remove any objects.
 
 ### AWS Storage Gateway
-> + **File Gatway**: A file gateway supports a file interface into Amazon Simple Storage Service (Amazon S3) and combines a service and a virtual software appliance. 
-> + Volume Gateway: A volume gateway provides cloud-backed storage volumes that you can mount as Internet Small Computer System Interface (iSCSI) devices from your on-premises application servers. The gateway supports the following volume configurations:
++ **File Gatway**: A file gateway supports a file interface into Amazon Simple Storage Service (Amazon S3) and combines a service and a virtual software appliance. 
++ Volume Gateway: A volume gateway provides cloud-backed storage volumes that you can mount as Internet Small Computer System Interface (iSCSI) devices from your on-premises application servers. The gateway supports the following volume configurations:
   + Cached volumes (frequently accessed data)
   + Stored volumes (low-latency access)
-> + Tape Gateway: With a tape gateway, you can cost-effectively and durably **archive backup** data in Amazon **Glacier**. 
++ Tape Gateway: With a tape gateway, you can cost-effectively and durably **archive backup** data in Amazon **Glacier**. 
 
 ### Amazon S3 Data Consistency Model
-> + Amazon S3 provides **read-after-write consistency** for **PUTS** of **new** objects in your S3 bucket in all regions with one caveat. 
-> + Amazon S3 offers **eventual consistency for overwrite PUTS and DELETES** in all regions.
++ Amazon S3 provides **read-after-write consistency** for **PUTS** of **new** objects in your S3 bucket in all regions with one caveat. 
++ Amazon S3 offers **eventual consistency for overwrite PUTS and DELETES** in all regions.
 
 ### Minimum and Maximum file sizes that can be stored in S3 respectively: **0 (not 1) Bytes** and **5 terabytes**
 
 ### How Do I Undelete a Deleted S3 Object?
-> + To be able to undelete a deleted object, you must have **had versioning enabled** on the bucket that contains the object before the object was deleted.
-> + When you delete an object in a versioning-enabled bucket, all versions remain in the bucket and Amazon S3 creates a **delete marker for the object**. To undelete the object, you must delete this delete marker. 
-> + When versioning is enabled, a simple DELETE **cannot** permanently delete a object.
-> + To **permanently** delete versioned objects, you must use **DELETE** Object **versionID**.
-
++ To be able to undelete a deleted object, you must have **had versioning enabled** on the bucket that contains the object before the object was deleted.
++ When you delete an object in a versioning-enabled bucket, all versions remain in the bucket and Amazon S3 creates a **delete marker for the object**. To undelete the object, you must delete this delete marker. 
++ When versioning is enabled, a simple DELETE **cannot** permanently delete a object.
++ To **permanently** delete versioned objects, you must use **DELETE** Object **versionID**.
 
 ***
 ## AWS API Gateway
@@ -430,33 +478,89 @@ _**API Gateway Access Logging**_
 In API Gateway access logging, you, as an API developer, want to log who has accessed your API and how the caller accessed the API.
 
 _**Controlling Access to an API in API Gateway**_
-> + Resouce policies
-> + Standard AWS IAM roles and policies
-> + Cross-origin resources sharing (CORS)
-> + Lambda authorizers
-> + Amazon Cognito user pools -- _As an alternative to using **IAM roles** and **policies** or **Lambda authorizers**, you can use an Amazon **Cognito user pool** to control who can access your API in Amazon API Gateway._
-> + Client-side SSL certificates
-> + Usage plans
++ Resouce policies
++ Standard AWS IAM roles and policies
++ Cross-origin resources sharing (CORS)
++ Lambda authorizers
++ Amazon Cognito user pools -- _As an alternative to using **IAM roles** and **policies** or **Lambda authorizers**, you can use an Amazon **Cognito user pool** to control who can access your API in Amazon API Gateway._
++ Client-side SSL certificates
++ Usage plans
 
 ***
 ## Lambda
-### Lambda - Event sources
-+ AWS Lambda supports many AWS services as event sources.
-+ **Event sources** maintain the event source mapping, except for the stream-based services (Amazon Kinesis Streams and Amazon DynamoDB streams).
-  + For the stream-based services, AWS Lambda maintains the event source mapping, and Lambda function performs polling.
-+ **Event sources that aren't stream-based**
-  + If you create a Lambda function to process events from the event sources that aren't stream-based. Each published event it a unit work, in parallel, up to your account limits.
+
+### Lambda
++ It offers Serverless computing
++ You pay only for the **compute time when the code is running**.
++ All calls made to AWS Lambda must complete execution within **300** seconds. Default timeout is 3 seconds. Timeout can be set the timeout any value between 1 and 300 secods.
++ AWS X-Ray helps tracing for Lambda functions, which provides insights such as Lambda service overhead, function init time, and function execution time.
+
+### Lambda - _Security_
++ Lambda stores code in S3 and encrypts it at rest and performs additional intergrity checkc while the code is in use.
++ Each AWS Lambda function runs in its own isolated environment, with its own resources and file system view.
+
+### Lambda - _Support codes written in_
++ Node.js
++ Python
++ Java
++ C#
++ Go
+
+### Lambda - _Event sources_
++ Event sources can be both push and pull soruces
+  + Service like S3, SNS publish events to Lambda by invoking the cloud function directly.
+  + Lambda can also poll resouces in services like _Kinesis stream_ that do not publish evetns to Lambda.
++ Event sources can grouped into:
+  + Regular AWS services:
+    + Also referred to as Push model
+    + Includes services like S3, SNS, SES, etc.
+  + Steam-based event sources
+    + Also referred to as Pull model
+    + Includes services like DynamoDB & Kinesis streams
+    + Need to have the event source mapping maintained on the Lambda side.
+
+### Lambda Support Event Sources
++ S3
++ DynamoDB
++ Kinesis Streams
++ SNS
++ SES
++ Amazon Cognito
++ CloudFormation
++ CloudWatch Logs
++ CloudWatch Events
++ CodeCommit
++ Scheduled Events
++ AWS Config
++ Amazon API Gateway
 
 ***
 ## Redshift
-+ Support encrption of data "at rest" using hardware accelerated AES-256 bits
++ It is a fuly maanged, fast and powerfull, petabyte scale data warehouse service.
++ Support encryption of data "at rest" using hardware accelerated AES-256 bits
   + By default, AWS Redshift takes care of encryption key management
   + You can choose to manage your own keys through HSM (Hardware Security Modules), or AWS KMS (Key Management Service).
 + Support SSL Encryption in-transit between client applications and Redshift data warehouse cluster.
 + You cannot have direct access to your AWS Redshift cluster nodes, however, you can through the applications themselves.
-+ Redshift can NOT ingest a large amount of data in real time (Kinesis can do this). 
++ Redshift can NOT ingest a large amount of data in real time (Kinesis can do this).
+### Redshift Performance
++ Massively Parallel Processing (MPP)
++ Columnar Data Storage
++ Advance Compression
 
-*** 
+### Redshift vs EMR vs RDS
++ RDS is ideal for
+  + structured data and running traditional relational databases while offloading database administration
+  + for online-transaction processing (OLTP) and for reporting and analysis
++ Redshift is ideal for
+  + large volumes of structured data that needs to be persisted and queried using standard SQL and existing BI tools
+  + analytic and reporting workloads against very large data sets by harnessing the scale and resources of multiple nodes and using a variety of optimizations to provide improvements over RDS
+  + preventing reporting and analytic processing from interfering with the performance of the OLTP workload
++ EMR is ideal for
+  + processing and transforming unstructured or semi-structured data to bring in to Amazon Redshift and
+  + for data sets that are relatively transitory, not stored for long-term use.
+
+***
 ## Kinesis
 Ad hoc query/analysis is a business intelligence process designed to answer a single, specific business question.
 + This allows for quicker response times when a business question comes up, which in turn should help the user respond to issues and make business decisions faster.
@@ -465,6 +569,23 @@ Ad hoc query/analysis is a business intelligence process designed to answer a si
 + Redshift is a columnar analytical data warehouse (analytical database).
   + It isn't designed to be continuously loaded, rather, a small number of concurrent queries performing large scans of data.
   + Not optimized for ad hoc querying.
+  
+### Kinesis vs SQS
++ Kinesis Streams enables **real-time** processing of streaming big data while SQS offers a **reliable**, **highly scalable hosted queue** for storing messages and move data between distributed application components
++ Kinesis provides **ordering of records**, as well as the ability to read and/or replay records in the same order to multiple Amazon Kinesis Applications while **SQS does not guarantee data ordering** and provides at least once delivery of messages
++ Kinesis stores the data up to 24 hours, by default, and can be extended to 7 days while SQS stores the message up to 4 days, by default, and can be configured from 1 minute to 14 days but clears the message once deleted by the consumer
++ Kineses and SQS both guarantee at-least once delivery of message
++ Kinesis supports **multiple consumers** while SQS allows the messages to be delivered to **only one consumer** at a time and requires multiple queues to deliver message to multiple consumers
++ Kinesis use cases requirements
+  + Ordering of records.
+  + Ability to consume records in the same order a few hours later
+  + Ability for multiple applications to consume the same stream concurrently
+  + Routing related records to the same record processor (as in streaming MapReduce)
++ SQS uses cases requirements
+  + Messaging semantics like message-level ack/fail and visibility timeout
+  + Leveraging SQS’s ability to scale transparently
+  + Dynamically increasing concurrency/throughput at read time
+  + Individual message delay, which can be delayed
 
 ***
 ## Route 53
