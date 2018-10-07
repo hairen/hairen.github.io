@@ -600,12 +600,21 @@ The length that a DNS record is cached on either the Resolving Server or the use
 
 ## CNAMES
 A Canoical(权威性) Name (CName) can be used to resolve one domain name to another. For example, you may have a mobile website with the domain name http://m.acloud.guru that is used for when users browse to your domain name on their mobile devices. You may also want the name http://mobile.acloud.guru to resolve to this same address.
++ The DNS protocol does not allow you to create a CNAME record for the top node of a DNS namespace, also known as the **zone apex**.
++ In addition, if you create a CNAME record for a subdomain, you **cannot** create any other records for that subdomain. For example, if you create a CNAME for www.example.com, you cannot create any other records for which the value of the Name field is www.example.com.
 
 ### Alias Records
 + Alias records are used to map resouce record sets in your hosted zone to Elastic Load Balancers, CloudFront distributions, or S3 buckets that are configured as websites.
 + Alias records work like a CNAME record in that you can map one DNS name (www.example.com) to another 'target' DNS name (elb1234.elb.amazonaws.com).
 + **Key difference** - A CNAME can't be used for naked domain names (zone apex record). You can't have a CNAME for http://acloud.guru, it must be either an A record or an Alias.
 + Given the choice, always choose an Alias Record **over** a CNAME.
+
+### Route 53 - _Routing Policy_
++ Simple Routing Policy
++ Weighted Routing Policy
++ Lantency-based Routing Policy
++ Failover Routing Policy
++ Geolocation Routing Policy
 
 ***
 ## ELB
