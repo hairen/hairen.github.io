@@ -97,112 +97,112 @@ When launching an EC2 instance in a VPC you can:
 ***
 ## EC2
 ### EC2 - _Enhanced Networking_
-> + Enhanced networking is **not** supported on **all** EC2 instances
-> + Enhanced networking does **NOT** cost extra
-> + Enhanced networking can be enabled on **Instance-store backed** or **EBS-backed EC2 instances**.
-> + Enhanced networking **requirements**:
->   + Instances be launched from an **HVM AMI** (no PV)
->   + Is ONLY supported **in a VPC**
++ Enhanced networking uses single root I/O virtualization (**SR-IOV**) to provide **high-performance** networking capabilities on supported instance types.
++ Enhanced networking is **not** supported on **ALL** EC2 instances
++ Enhanced networking does **NOT** cost extra
++ Enhanced networking can be enabled on **Instance-store backed** or **EBS-backed EC2 instances**.
++ Enhanced networking **requirements**:
+  + Instances be launched from an **HVM AMI** (no PV)
+  + Is ONLY supported **in a VPC**
 
 ### EC2 - _Placement Groups_
-> + Is a feature that allows involved EC2 instances to communicate via **high bandwidth** and **low latency** connections **within an AZ**.
-> + Placement groups **must** have all instances in the **same** AZ (only one single)
-> + You can use **Enhanced networking instances** in **Placement groups**.
-> + A placement group is ideal for EC2 instances that require **high network** throughout and **low latency** across **a single AZ**.
++ Is a feature that allows involved EC2 instances to communicate via **high bandwidth** and **low latency** connections **within an AZ**.
++ Placement groups **MUST** have all instances in the **SAME** AZ (only one single)
++ You can use **Enhanced networking instances** in **Placement groups**.
++ A placement group is ideal for EC2 instances that require **high network** throughout and **low latency** across **a single AZ**.
 
 ### EC2 - _Bastion Host_
-> + Bastion host needs to be deployed in a **public** subnet
-> + You can allow RDP or SSH or both based on the Windows or Linux instances you need to manage respectivly
-> + Bostion host can have an Elastic IPv4 address attached, or also can be accessed using the auto-assigned public IPv4.
++ Bastion host needs to be deployed in a **public** subnet
++ You can allow **RDP** or **SSH** or both based on the **Windows** or **Linux** instances you need to manage respectivly
++ Bostion host can have an Elastic IPv4 address attached, or also can be accessed using the auto-assigned public IPv4.
 
 ### EC2 - _Options_
-> + On Demand: Fixed rate by hour (by the second) with no commitment.
-> + Reserved (Cheaper than ON Demand)
-> + Spot
-> + Dedicated Hosts: Physical EC2 server dedicated for you use. Dedicated Hosts can help you reduce costs by allowing you to use your existing server-bound software licenses.
++ On Demand: Fixed rate by hour (by the second) with no commitment.
++ Reserved (Cheaper than ON Demand)
++ Spot
++ Dedicated Hosts: Physical EC2 server dedicated for you use. Dedicated Hosts can help you reduce costs by allowing you to use your existing server-bound software licenses.
 
 ### EC2 - _Status Checks_
-> + Reboot assumes that instance is in running state and does not change the host. **'impaired'** means **host** is not working properly.
-> + If EC2 status checks detect a software or hardwar on the underlying host, it will make the instance(Guest EC2 instances) as **impaired**.
-> + For EBS backed instances **stopping and restarting** the instance will cause it to **launch on a new host**, which will fix the problem.
-> + For Instance-store backed instances, stopping the instance is not an option, and what you can do is to **_re-launch_ the instance**, but first create an AMI snapshot (or use the last created AMI snapshot) to launch a new instance.
++ **Reboot** assumes that instance is in running state and **does not change the host**. **'Impaired'** means **host** is not working properly.
++ If EC2 status checks detect a software or hardwar on the underlying host, it will make the instance(Guest EC2 instances) as **impaired**.
++ For EBS backed instances **stopping and restarting** the instance will cause it to **launch on a new host**, which will fix the problem.
++ For Instance-store backed instances, stopping the instance is not an option, and what you can do is to **_re-launch_ the instance**, but first create an AMI snapshot (or use the last created AMI snapshot) to launch a new instance.
 
 ### EC2 - _ENIs_
-> + An EC2 instance can have **two** (or **more**, it depends on intances family/type) ENIs in **two different subnets**.
->   + They both and the EC2 instance MUST be in the **same** AZ.
-> + By default, network interfaces created "**automatically**" during EC2 instance launch by AWS console, are terminated when the instance is terminated.
->   + **Does not include eth1** that you can add during launch (manually added).
-> + Network interfaces created by **CLI** are **"NOT" terminated** **automatically** when the EC2 instance terminates.
++ An EC2 instance can have **two** (or **more**, it depends on intances family/type) ENIs in **two different subnets**.
+  + They both and the EC2 instance MUST be in the **same** AZ.
++ By default, network interfaces created "**automatically**" during EC2 instance launch by AWS console, are **terminated when the instance is terminated**.
+  + **Does not include eth1** that you can add during launch (manually added).
++ Network interfaces created by **CLI** are **NOT** terminated** **automatically** when the EC2 instance terminates.
 
-### EC2 - Instance Access
-> + You have root access with **OpsWorks**, **EC2**, and **Elatic Bean Stalk**, **EMR**.
-> + You could only add an IAM at the time you launch an instance.
-    + If you wanted to add an IAM role to a running instance, you could not do it.
-> + Now you can add an IAM role to a running EC2 instance.
->    + So depending on the exam question choices:
->      + Create a new EC2 instance and add the IAM role at launch time.
->      + You can add the IAM role while the instance is running.
->    + But if you have both but need to select only one.
->    + I would choose the first one, create a new EC2 instance and add ..., because it will still stand true.
->    + Unless if you were asked to select (2), then I would choose both.
+### EC2 - _Instance Access_
++ You have root access with **OpsWorks**, **EC2**, and **Elatic Bean Stalk**, **EMR**.
++ You could only add an IAM at the time you launch an instance.
+  + If you wanted to add an IAM role to a running instance, **you could not do it**.
++ Now you can add an IAM role to a running EC2 instance.
+  + So depending on the exam question choices:
+    + Create a new EC2 instance and add the IAM role at launch time.
+    + You can add the IAM role while the instance is running.
+  + But if you have both but need to select only one.
+    + I would choose the first one, create a new EC2 instance and add ..., because it will still stand true.
+    + Unless if you were asked to select (2), then I would choose both.
 
 ### EC2 - _instance Immediate Termination_
-Possible reasons that a launched instance immediately terminates are:
-> + The instance store-backed AMI you used to launch the instance is missing a required part.
-> + You're reached out your EBS volume limit
-> + An EBS snapshot is corrupt.
++ Possible reasons that a launched instance immediately terminates are:
+  + The instance store-backed AMI you used to launch the instance is missing a required part.
+  + You're reached out your EBS volume limit
+  + An EBS snapshot is corrupt.
 
-### EC2 Troubleshooting
-> + **Connection Timeout Error**
->   + Check if the instance is undergoing a **high CPU load**.
-> + **Host Key Not Found Error**
->   + Check that the correct username for the instance AMI has been used in the SSH connection request.
->   + Verify that the connect private way (.pem) file has been used for the connection.
-> + **Unprotected Private Key Error**
->   + Verify that the private key has the right permissions.
-> + **Insufficient Capacity Error** (When you try to launch an instance or start a stopped instance)
->   + There was no avaliable EC2 capacity to service your request.
+### _EC2 Troubleshooting_
++ **Connection Timeout Error**
+  + Check if the instance is undergoing a **high CPU load**.
++ **Host Key Not Found Error**
+  + Check that the correct username for the instance AMI has been used in the SSH connection request.
+  + Verify that the connect private way (.pem) file has been used for the connection.
++ **Unprotected Private Key Error**
+  + Verify that the private key has the right permissions.
++ **Insufficient Capacity Error** (When you try to launch an instance or start a stopped instance)
+  + There was no avaliable EC2 capacity to service your request.
 
-### EC2 - Termination Protection
-> + You **CAN** terminate instances  with termination protaction enabled.
-> + Initiate a shutdown from the Instance Operating System, and instruct AWS to treat it as a terminate.
+### EC2 - _Termination Protection_
++ You **CAN** terminate instances with termination protaction enabled.
++ Initiate a shutdown from the Instance Operating System, and instruct AWS to treat it as a terminate.
 
-### EC2 - Reserved Instances
-> + You can **NOT** migrate RI instances between regions.
-> + They are** Instance Family** specific.
-> + They are used  to lower costs.
-> + They can have their scope modified from region (default) to AZ or the other way around.
-> + They can be used to launch AS Group instances or standalone ones.
+### EC2 - _Reserved Instances_
++ You can **NOT** migrate RI instances between regions.
++ They are **Instance Family** specific.
+  + They are used to lower costs.
+  + They can have their scope modified from region (default) to AZ or the other way around.
+  + They can be used to launch AS Group instances or standalone ones.
 
 ### EC2 - IAM roles
-+ Basically IAM Roles allow EC2 instances, and applications on EC2 instances, **secure access to another AWS services** such as S3, SQS, SNS, DynamoDB, ...etc.
++ Basically IAM Roles allow EC2 instances, and applications on EC2 instances, **secure access to another AWS services** such as **S3**, **SQS**, **SNS**, **DynamoDB**, ...etc.
   + This will avoid having to store secure access credentials on EC2 instances.
 
-
 ### SSD
-+ General Purpose SSD - balances price and performance for a wide varity of workloads.
-+ Provisioned IOPS SSD - Highest performance SSD volume for mission-critical low-latency or high-throughput workloads.
++ General Purpose SSD - **balances price and performance** for a wide varity of workloads.
++ Provisioned IOPS SSD - Highest performance SSD volume for mission-critical **low-latency** or **high-throughput** workloads.
   
 ### Magnetic
-+ Throughput Optimized HDD - Low cost HDD volume designed for frequently accessed, throughput-intensiv workloads.
-+ Cold HDD - Lowest cost HDD volume designed for less frequently accessed workloads. (Cannot be a boot volume)
-+ Magnetic - Previous Generation. Can be a boot volume.
++ Throughput Optimized HDD - **Low cost HDD** volume designed for frequently accessed, throughput-intensive workloads.
++ Cold HDD - Lowest cost HDD volume designed for **less** frequently accessed workloads. (Cannot be a boot volume).
++ Magnetic - Previous Generation. Can be a **boot volume**.
 
 ### Security Group
 + You **CANNOT** block **specific IP** addresses using **Security Groups**, instead use **Network Access Control Lists.**
-+ You can specify allow rules, but not deny rules.
++ You can only specify allow rules, but not deny rules.
 
 ### EBS vs Instance Store
-> + All AMIs are categorized as either backed by Amazon EBS or backed by instance store.
-> + For EBS Volumes: The root decice from an instance launched from the AMI is an Amazon EBS volume created from an Amazon EBS snapshot.
-> + For Instance Store Volumes: The root device for an instance launched from the AMI is an instance store volumne created from a template stored in Amazon S3.
-> + Instance Store Volumes are sometimes called **Ephemeral Storage**.
-> + Instance store volumes cannot be stopped. If the underlying host fails, you will lose your data.
-> + EBS backed instances can be stopped.You will not lose the data on this instance if it is stopped.
-> + You can REBOOT both, you will not lose your data.
-> + By default, boot ROOT volumes will be deleted on termination, however with EBS volumes, you can tell AWS to keep the root device volumne.
-> + EBS snapshohts are backed up to S3 in what manner? (Incrementally)
-> + By default EBS volumes are set to 'Delete on Termination', meaning they persist only if instructed.
++ All AMIs are categorized as either backed by Amazon EBS or backed by instance store.
++ For EBS Volumes: The root decice from an instance launched from the AMI is an Amazon EBS volume created from an Amazon EBS snapshot.
++ For Instance Store Volumes: The root device for an instance launched from the AMI is an instance store volumne created from a template stored in Amazon S3.
++ Instance Store Volumes are sometimes called **Ephemeral Storage**.
++ Instance store volumes cannot be stopped. If the underlying host fails, you will lose your data.
++ EBS backed instances can be stopped. You will not lose the data on this instance if it is stopped.
++ You can REBOOT both, you will not lose your data.
++ By default, boot ROOT volumes will be deleted on termination, however with EBS volumes, you can tell AWS to keep the root device volumne.
++ EBS snapshohts are backed up to S3 in what manner? (**Incrementally**)
++ By default EBS volumes are set to '**Delete on Termination**', meaning they persist only if instructed.
 
 ***
 ## EBS
@@ -350,8 +350,14 @@ Possible reasons that a launched instance immediately terminates are:
 ### Glacier
 > + Three archive retrieval methods can be used to restore archives from Glacier
 >   + Expedited
+>     + More expensive
+>     + Use for urgent requests only.
 >   + Standard
+>     + Less expensive than Expedited
+>     + You get 10GB data retrieval free/month
 >   + Bulk
+>     + Cheapest
+>     + Use to retrieve large amounts up to Petabytes in a day.
 > + **Synchronous** Upload and **Asynchronous** Retrieval
 
 ### S3 Security
