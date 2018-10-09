@@ -262,7 +262,7 @@ When launching an EC2 instance in a VPC you can:
 
 ### AS - **Terminating Unhealthy Instances**
 + For **Rebalancing**, a **new instance** is launched **first** then the one(s) causing the imbalance get terminated.
-+ For **Unhealthy instances**, Auto Scaling has to **terminate the unhealthy first**, the launch a new one.
++ For **Unhealthy instances**, Auto Scaling has to **terminate the unhealthy first**, the **launch a new one**.
 
 ### Merging ASGs
 + To merge existing ASGs, one of them must be updated to span the set of AZs of all groups.
@@ -282,8 +282,29 @@ The follwing parameters can influence auto scaling decisions based on their valu
 + The **alarm thresholds** based on which a scale-out or scale-in events can be triggered
   + Lowering the thresholds may cause more scaling out, and increasing the thresholds may cause more scaling in.
 
-### ASG - Launch Configuration via CLI
-+ CLI enabled **detailed** monitoring, while AWS Console enabled **basic** monitoring by default.
+### ASG - Launch Configuration
+![AWS Auto Scaling](https://i2.wp.com/jayendrapatil.com/wp-content/uploads/2016/03/AWS-Auto-Scaling-Configurations.png?w=1312)
+
++ It's similar to EC2 configuartion and involves selection of the AMI, **instance type**, a **key pair**, one or more **security groups**, and a **block device mapping**.
++ Launch configuration can be associated **multiple** Auto Scaling Groups.
++ Launch configuartion **cannot** be modified after created.
++ CLI or an API enabled **Detailed** monitoring, while AWS Console enabled **Basic** monitoring by default.
++ You can **attach** a load balancer **to** your Auto Scaling group.
+
+### Health Check Grace Period
++ Health check grace period **does not** start **until** the lifecycle hook completes and the instance enters the **InService** state.
+
+### Default Termination Policy
+1.Selection of Availability Zone
+  + selects the AZ, in multiple AZs environment, with the **most instances** and at least one instance that is not protected from scale in.
+  + selects the AZ with instances that use the **oldest launch configuration**, if there are more than one AZ with same number of instances.
+2. Selection of an Instance in the Availability Zone.
+  + terminates the **unprotected instance using the oldest launch configuration**, if one exists.
+  + terminates unprotected instances **closest to the next billing hour**, If multiple instances with oldest launch configuration. This helps in maximizing the use of the EC2 instances while minimizing the number of hours billed for EC2 usage.
+  + terminates instances at **random**, if more than one unprotected instance closest to the next billing hour
+
+
+![The following flow diagram illustrates how the default termination policy works.](https://docs.aws.amazon.com/autoscaling/ec2/userguide/images/termination-policy-default-flowchart-diagram.png)
 
 ### Dynamic (Event-based) Scaling
 + The following parameters can influence auto scaling decisions based on their values
