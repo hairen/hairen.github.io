@@ -318,7 +318,7 @@ The follwing parameters can influence auto scaling decisions based on their valu
 ***
 ## RDS
 ### RDS
-+ RDS is web service that makes it earier to setup, operate, and scale a **relational database **in the cloud.
++ RDS is web service that makes it earier to setup, operate, and scale a **relational database** in the cloud.
 
 ### RDS - Features & benefits
 > + CPU, memory, storage, and IOPS can be scaled independently.
@@ -326,10 +326,10 @@ The follwing parameters can influence auto scaling decisions based on their valu
 > + Automated backups can be performed as needed, or manual backups can be triggered as well. Backups can be used to restore a database, and the RDS restore process works reliably and efficiently.
 > + Provides high availability with a primary instance and a synchronous secondary instance that can be failovered to seamlessly when a problem occurs.
 > + Provides elasticity & scalability by enabling MySQL, MariaDB, or PostgreSQL Read Replicas to increase read scaling.
-> + Supports MySQL, MariaDB, PostgreSQL, Oracle, Microsoft SQL Server, and the new, MySQL-compatible Amazon Aurora DB engine.
+> + Supports MySQL, MariaDB, PostgreSQL, Oracle, Microsoft SQL Server, and the new, MySQL-compatible **Amazon Aurora DB** engine.
 > + In addition to the security in the database package, IAM users and permissions can help to control who has access to the RDS databases.
 > + Databases can be further protected by putting them in a VPC, using SSL for data in transit and encryption for data in rest
-> + However, as it is a managed service, shell (root ssh) access to DB instances is not provided, and this restricts access to certain system procedures and tables that require advanced privileges.
+> + However, as it is a managed service, **shell (root ssh) access to DB instances is not provided**, and this restricts access to certain system procedures and tables that require advanced privileges.
 
 ### RDS - _DB Instance_
 > + is a basic building block of RDS
@@ -343,25 +343,38 @@ The follwing parameters can influence auto scaling decisions based on their valu
 > + each DB instance can host multiple databases, or a single Oracle database with multiple schemas.
 > + can be hosted in an AWS VPC environment for better control
 
-
-
 ### RDS - _Multi-AZ & Read replicas_
-DB instance replicas can be created in two ways **Multi-AZ** and **Read Replica**
-#### Multi-AZ deployment
-> + It provides **high availability and failover** support.
-> + RDS automatically provisions and manages a synchronous standby replica in a different AZ.
-> + RDS automatically fails over to the standby.
++ DB instance replicas can be created in two ways **Multi-AZ** and **Read Replica**
 
-#### Read Replica
+> **Multi-AZ deployment**
+> + It provides **high availability** and **failover** support.
+> + RDS automatically provisions and manages a **synchronous** standby replica in a different AZ.
+> + RDS automatically fails over to the **standby**.
+> 
+> **Read Replica**
+> + RDS uses the PostgreSQL, MySQL, and MariaDB DB engines’ **built-in** replication functionality to create a special type of DB instance called a Read Replica from a source DB instance.
+> + Load on the source DB instance can be reduced by routing read queries from applications to the Read Replica.
+> + Read Replicas allow elastic scaling beyond the capacity constraints of a single DB instance for read-heavy database workloads.
+> + Updates made to the source DB instance are **asynchronously** copied to the Read Replica.
+> + Read Replicas require a transactional storage engine and are only supported for the **InnoDB**.
+
+### RDS - _Multi-AZ Deployment_
++ Multi-AZ is a **High Availability** feature is not a scaling solution for read-only scenarios; **standby replica** can’t be used to serve read traffic. To service read-only traffic, use a **Read Replica**.
++ Multi-AZ deployments for Oracle, PostgreSQL, MySQL, and MariaDB DB instances use Amazon technology, **while SQL Server DB instances use SQL Server Mirroring**.
+
+### RDS - Multi-AZ Failover Process
++ Failover mechanism automatically changes the **DNS record** of the DB instance to point to the standby DB instance.
++ How can you initate a manual failover from the RDS primary DB Instance to the Standby RDS DB instance in a multi-AZ RDS deployment in an AWS VPC?
+  + You need to initiate a reboot with a failover on the primary RDS instance.
+  
+### RDS - Read Replica
 > + Read replicas can be used to scale read operations performance, however:
 >   + They can not written to (except in MySQL and MariaDB release 5,6 and later).
 >   + You can create snapshots from read replicas.
 >   + Asynchronous replication happens from **Primary to read replicas**.
 >   + You **only** have access to the **DB engine itself**.
 > + In case of multiple read replicas (MySQL, MariaDB), Promoting one to a standalone DB instance does not affect the other read replicas, those will continue to read from the former primart (source DB instance).
-> + **MySQL** and **MariaDB** support read replicas of read replicas.
-> + All RDS database engines except **MS SQL server** can have RDS instance storage capacity up to **6GB**
-> + **MS SQL DB engine** can have storage capcity up to **4TB**
+> + **MySQL** and **MariaDB** support **read replicas of read replicas**.
 > + Every DB instance has a weekly maintenance window, if you didn't specify one at the time you create the DB instance, AWS will choose one randomly for you (30 mins long).
 > + To keep automatic backups enabled, retention period must be set to a **non-zero** value.
 > + If you set **retention period to zero**, automatice backups are **disabled**, hence, point-in-time recovery which relies on automatic backups presence, will not function as well.
@@ -379,13 +392,13 @@ DB instance replicas can be created in two ways **Multi-AZ** and **Read Replica*
 + You can also use **CloudWatch Alarms and events** to monitor certain metrics, and based on alarms or events take some actions (or notify using SNS).
 + **CloudTrail** also logs all API calls made to the AWS RDS API.
 
-### RDS - failover in Multi-AZ
-+ How can you initate a manual failover from the RDS primary DB Instance to the Standby RDS DB instance in a multi-AZ RDS deployment in an AWS VPC?
-  + You need to initiate a reboot with a failover on the primary RDS instance.
-
 ### Adding Storage and Changing Storage Type
 + DB instance can be modified to use additional storage and converted to a different storage type.
 + However, storage allocated for a DB instance **cannot be decreased**.
+
+### RDS - _Storage Types_
++ RDS storage provides threee storage types: **Magnetic**, **General Purupse** (SSD), and **Provisioned IOPS** (input/output perations per second).
++ **MySQL**, **MariaDB**, **PostgreSQL**, and **Oracle RDS DB** can have RDS instance storage capacity up to **6TB**, **MS SQL DB engine** can have storage capcity up to **4TB** whenusing Provisioned IOPS and General Purpose (SSD) storage types.
 
 ### RDS DB instance Maintenance and Upgrades
 + Multi-AZ deployment for the DB instance reduces the impact of a maintenance event by following these steps:
@@ -394,8 +407,8 @@ DB instance replicas can be created in two ways **Multi-AZ** and **Read Replica*
   + Perform maintenance on the old primary, which becomes the new standby.
 
 ### RDS - _Monitoring & Notification_
-+ RDS integrates with CloudWatch and provides metrics for monitoring
-+ CloudWatch alarms can be created over a sinfle metric that sends an SNS message when the alarm changes state.
++ RDS integrates with **CloudWatch** and provides metrics for monitoring
++ **CloudWatch** alarms can be created over a single metric that sends an SNS message when the alarm changes state.
 + RDS also provides SNS notification when any RDS event occurs.
 
 ***
@@ -434,7 +447,7 @@ DB instance replicas can be created in two ways **Multi-AZ** and **Read Replica*
 + You can use _access control mechanisms_ such as **bucket policies** and **Access Control Lists** (ACLs) to selectively grant permissons to users and groups of users.
 + You can also securly upload/download your data to Amazon S3 via **SSL** endpoints using the HTTPS protocol, or by using **Server-Side Encryption (SSE)** or **Client-Side Encryption**.
 + **Access log** records can be used for audit purposes and contain details about the request, such as the request type, the resources specified in the request, and the time and date the request was processed.
-+ By **AWS CloudTrail Data Events**, customers who need to capture IAM/user identity iinformation in their logs.
++ By **AWS CloudTrail Data Events**, customers who need to capture IAM/user identity information in their logs.
 
 ### Options for encrypting data stored on Amazon S3
 + **SSE-S3** : It's provides an intergated solution where Amazon handles key management and key protection using multiple layers of security.
@@ -737,3 +750,33 @@ ELB monitoring can be achieved by:
     + ELB service can scale and keep up with traffic increase, if you traffic increases at 50% in step or linear form every 5 mins.
 + ELB Pre-Warm
   + If your traffic increases faster than this, you need to contact AWS to pre-warm ELB nodes for your traffic needs.
+
+### Classic Load Balancer - Logging mechaism
++ It can be used to capture detailed information about requests sent to your load balancer.
++ There is no additional charge for access logs.
++ The logs are stored in S3.
++ Access logging is disabled by default.
+
+***
+## AWS ElastiCache
++ ElastiCache is available in two flavours: **Memcached** and **Redis**
++ ElastiCache currently allows access only from the EC2 network and cannot be accessed from outside networks like on-premises servers.
+
+***
+## AWS CloudTrail
+> + A trail can be applied to all regions or a single region
+>   + A trail that applies to all regions
+>     + When a trail is created that applies to all regions, CloudTrail creates the same trail in each region, records the log files in each region, and delivers the log files to the specified single S3 bucket (and optionally to the CloudWatch Logs log group)
+>     + Default setting when a trail is created using the CloudTrail console
+>     + A single SNS topic for notifications and CloudWatch Logs log group for events would suffice for all regions
+>     + Advantages
+>       + configuration settings for the trail apply consistently across all regions
+>       + manage trail configuration for all regions from one location.
+>       + immediately receive events from a new region
+>       + receive log files from all regions in a single S3 bucket and optionally in a CloudWatch Logs log group.
+>       + create trails in regions not used often to monitor for unusual activity
+>     + A trail that applies to one region
+>       + A S3 bucket can be specified that receives events only from that region and it can be in any region that you specify.
+>       +Additional individual trails created that apply to specific regions, those trails can deliver event logs to a single S3 bucket.
+
+
