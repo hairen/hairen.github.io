@@ -430,6 +430,9 @@ The follwing parameters can influence auto scaling decisions based on their valu
 | S3 Reduced Redundancy storage class (S3-RRS) | 99.99% | 99.99% |
 | Glacier storage | No SLA or Availability guarantees | 99.999999999% |
 
+### Amazon S3 Reduced Redundancy Storage
++ It is an Amazon S3 storage option that enables customers to store noncritical, reproducible data at lower levels of redundancy than Amazon S3's standard storage.
+
 ### Glacier
 + Three archive retrieval methods can be used to restore archives from Glacier
   + Expedited
@@ -584,15 +587,15 @@ _**Controlling Access to an API in API Gateway**_
 
 ### Redshift vs EMR vs RDS
 + RDS is ideal for
-  + structured data and running traditional relational databases while offloading database administration
-  + for online-transaction processing (OLTP) and for reporting and analysis
+  + structured data and running **traditional relational databases** while offloading database administration
+  + for **online-transaction processing** (OLTP) and for reporting and analysis
 + Redshift is ideal for
-  + large volumes of structured data that needs to be persisted and queried using standard SQL and existing BI tools
-  + analytic and reporting workloads against very large data sets by harnessing the scale and resources of multiple nodes and using a variety of optimizations to provide improvements over RDS
-  + preventing reporting and analytic processing from interfering with the performance of the OLTP workload
+  + **large** volumes of **structured** data that needs to be **persisted** and queried using **standard SQL** and **existing BI tools**
+  + analytic and reporting workloads against **very large data** sets by harnessing the scale and resources of multiple nodes and using a variety of optimizations to **provide improvements over RDS**
+  + **preventing reporting and analytic processing from interfering with the performance of the OLTP workload**
 + EMR is ideal for
-  + processing and transforming unstructured or semi-structured data to bring in to Amazon Redshift and
-  + for data sets that are relatively transitory, not stored for long-term use.
+  + processing and transforming **unstructured** or **semi-structured data** to bring in to Amazon Redshift and
+  + for data sets that are relatively **transitory**, **not stored for long-term use**.
 
 ***
 ## Kinesis
@@ -600,9 +603,13 @@ Ad hoc query/analysis is a business intelligence process designed to answer a si
 + This allows for quicker response times when a business question comes up, which in turn should help the user respond to issues and make business decisions faster.
 + The produce of ad hoc analysis is typically a statistical model, analytic report, or other type of data summary.
 + Ad hoc analysis may be used to create a report that does not already exist, or drill deeper into a static report tot get details about accounts, transactions, or records.
+
+***
+## Redshift
 + Redshift is a columnar analytical data warehouse (analytical database).
   + It isn't designed to be continuously loaded, rather, a small number of concurrent queries performing large scans of data.
   + Not optimized for ad hoc querying.
+  + It supports **CloudHSM** (Cloud Hardware System Model), **RDS** also supports HSM.
   
 ### Kinesis vs SQS
 + Kinesis Streams enables **real-time** processing of streaming big data while SQS offers a **reliable**, **highly scalable hosted queue** for storing messages and move data between distributed application components
@@ -778,5 +785,14 @@ ELB monitoring can be achieved by:
 >     + A trail that applies to one region
 >       + A S3 bucket can be specified that receives events only from that region and it can be in any region that you specify.
 >       +Additional individual trails created that apply to specific regions, those trails can deliver event logs to a single S3 bucket.
+> + A trail is a configuration that enables delivery of CloudTrail events to an Amazon **S3 bucket**, **CloudWatch Logs**, and **CloudWatch Events**.
+
+***
+## CloudFormation
++ AWS CloudFormation provides a common language for you to describe and provision all the infrastructure resources in your cloud environment. CloudFormation allows you to use a simple text file to model and provision, in an automated and secure manner, all the resources needed for your applications across all regions and accounts. This file serves as the single source of truth for your cloud environment. 
+
+***
+## AWS OpsWorks
++ AWS OpsWorks is a configuration management service that provides managed instances of Chef and Puppet. Chef and Puppet are automation platforms that allow you to use code to automate the configurations of your servers. OpsWorks lets you use Chef and Puppet to automate how servers are configured, deployed, and managed across your Amazon EC2 instances or on-premises compute environments. OpsWorks has three offerings, AWS Opsworks for Chef Automate, AWS OpsWorks for Puppet Enterprise, and AWS OpsWorks Stacks.
 
 
