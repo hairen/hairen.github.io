@@ -147,7 +147,7 @@ When launching an EC2 instance in a VPC you can:
     + I would choose the first one, create a new EC2 instance and add ..., because it will still stand true.
     + Unless if you were asked to select (2), then I would choose both.
 
-### EC2 - _instance Immediate Termination_
+### EC2 - _Instance Immediate Termination_
 + Possible reasons that a launched instance immediately terminates are:
   + The instance store-backed AMI you used to launch the instance is missing a required part.
   + You're reached out your EBS volume limit
@@ -203,6 +203,7 @@ When launching an EC2 instance in a VPC you can:
 + By default, boot ROOT volumes will be deleted on termination, however with EBS volumes, you can tell AWS to keep the root device volumne.
 + EBS snapshohts are backed up to S3 in what manner? (**Incrementally**)
 + By default EBS volumes are set to '**Delete on Termination**', meaning they persist only if instructed.
+![](https://i0.wp.com/jayendrapatil.com/wp-content/uploads/2016/04/screen-shot-2016-04-06-at-6-36-02-am.png?w=1312)
 
 ***
 ## EBS
@@ -253,6 +254,9 @@ When launching an EC2 instance in a VPC you can:
   + For example **T2 Micro instances** do not support encryption
 + Given the above, data between an encrypted volume and EC2 instance is **encrypted in transit** (Encrypted on the EC2 insetance then move to EBS volume).
 
+### EBS - Optimized
++ EBS-optimized instances enable you to get consistently high performance for the EBS volumes by **eliminating contention between EBS I/O and other network traffic from the instance**.
+
 ***
 ## ASG
 ### EC2 Status Checks
@@ -298,7 +302,7 @@ The follwing parameters can influence auto scaling decisions based on their valu
 1.Selection of Availability Zone
   + selects the AZ, in multiple AZs environment, with the **most instances** and at least one instance that is not protected from scale in.
   + selects the AZ with instances that use the **oldest launch configuration**, if there are more than one AZ with same number of instances.
-2. Selection of an Instance in the Availability Zone.
+1. Selection of an Instance in the Availability Zone.
   + terminates the **unprotected instance using the oldest launch configuration**, if one exists.
   + terminates unprotected instances **closest to the next billing hour**, If multiple instances with oldest launch configuration. This helps in maximizing the use of the EC2 instances while minimizing the number of hours billed for EC2 usage.
   + terminates instances at **random**, if more than one unprotected instance closest to the next billing hour
@@ -397,8 +401,8 @@ The follwing parameters can influence auto scaling decisions based on their valu
 + However, storage allocated for a DB instance **cannot be decreased**.
 
 ### RDS - _Storage Types_
-+ RDS storage provides threee storage types: **Magnetic**, **General Purupse** (SSD), and **Provisioned IOPS** (input/output perations per second).
-+ **MySQL**, **MariaDB**, **PostgreSQL**, and **Oracle RDS DB** can have RDS instance storage capacity up to **6TB**, **MS SQL DB engine** can have storage capcity up to **4TB** whenusing Provisioned IOPS and General Purpose (SSD) storage types.
++ RDS storage provides three storage types: **Magnetic**, **General Purupse (SSD)**, and **Provisioned IOPS** (input/output perations per second).
++ **MySQL**, **MariaDB**, **PostgreSQL**, and **Oracle RDS DB** can have RDS instance storage capacity up to **6TB**, **MS SQL DB engine** can have storage capcity up to **4TB** when using Provisioned IOPS and General Purpose (SSD) storage types.
 
 ### RDS DB instance Maintenance and Upgrades
 + Multi-AZ deployment for the DB instance reduces the impact of a maintenance event by following these steps:
@@ -573,13 +577,14 @@ _**Controlling Access to an API in API Gateway**_
 
 ***
 ## Redshift
-+ It is a fuly maanged, fast and powerfull, petabyte scale data warehouse service.
++ It is a fully maanged, fast and powerfull, petabyte scale data warehouse service.
 + Support encryption of data "at rest" using hardware accelerated AES-256 bits
   + By default, AWS Redshift takes care of encryption key management
   + You can choose to manage your own keys through HSM (Hardware Security Modules), or AWS KMS (Key Management Service).
 + Support SSL Encryption in-transit between client applications and Redshift data warehouse cluster.
 + You cannot have direct access to your AWS Redshift cluster nodes, however, you can through the applications themselves.
 + Redshift can NOT ingest a large amount of data in real time (Kinesis can do this).
+
 ### Redshift Performance
 + Massively Parallel Processing (MPP)
 + Columnar Data Storage
@@ -597,12 +602,39 @@ _**Controlling Access to an API in API Gateway**_
   + processing and transforming **unstructured** or **semi-structured data** to bring in to Amazon Redshift and
   + for data sets that are relatively **transitory**, **not stored for long-term use**.
 
+### Kinesis vs SQS
+> + Kinesis Streams enables real-time processing of streaming big data while SQS offers a reliable, highly scalable hosted queue for storing messages and move data between distributed application components.
+> + Kinesis provides ordering of records, as well as the ability to read and/or replay records in the same order to multiple Amazon Kinesis Applications while SQS does not guarantee data ordering and provides at least once delivery of messages.
+> Kinesis stores the data up to **24 hours**, by default, and can be extended to **7 days** while SQS stores the message up to **4 days**, by default, and can be configured from **1 minute** to **14 days** but clears the message once deleted by the consumer.
+> + Kineses and SQS both guarantee at-least once delivery of message.
+> + Kinesis supports multiple consumers while SQS allows the messages to be delivered to only one consumer at a time and requires multiple queues to deliver message to multiple consumers.
+> + Kinesis use cases requirements
+>   + **Ordering** of records.
+>   + Ability to consume records **in the same order** a few hours later
+>   + Ability for **multiple** applications to consume the same stream concurrently
+>   + Routing related records to the **same** record processor (as in streaming MapReduce)
+> + SQS uses cases requirements
+>   + Messaging semantics like message-level ack/fail and visibility timeout
+>   + Leveraging SQS’s ability to scale transparently
+>   + Dynamically increasing concurrency/throughput at read time
+>   + Individual message delay, which can be delayed
+
 ***
 ## Kinesis
-Ad hoc query/analysis is a business intelligence process designed to answer a single, specific business question.
-+ This allows for quicker response times when a business question comes up, which in turn should help the user respond to issues and make business decisions faster.
-+ The produce of ad hoc analysis is typically a statistical model, analytic report, or other type of data summary.
-+ Ad hoc analysis may be used to create a report that does not already exist, or drill deeper into a static report tot get details about accounts, transactions, or records.
++ Kinesis enables **real-time** processing of streaming data at massive scale.
++ Kinesis Streams is useful for rapidly moving data off data producers and then continuously processing the data, be it to transform the data before emitting to a data store, run real-time metrics and analytics, or derive more complex data streams for further processing.
+  + Accelerated log and data feed intake.
+  + Real-time metrics and reporting.
+  + Real-time data analytics.
+  + Complex stream processing.
++ Ad hoc query/analysis is a business intelligence process designed to answer a single, specific business question.
+  + This allows for quicker response times when a business question comes up, which in turn should help the user respond to issues and make business decisions faster.
+  + The produce of ad hoc analysis is typically a statistical model, analytic report, or other type of data summary.
+  + Ad hoc analysis may be used to create a report that does not already exist, or drill deeper into a static report tot get details about accounts, transactions, or records.
+  
+***
+## Amazon Elastic MapReduce (EMR)
++ Kinesis can collect data from hundreds of thousands of sources, such as web site click-streams, marketing and financial information, manufacturing instrumentation, social media and more. This connector enables batch processing of data in **Kinesis** streams with familiar Hadoop ecosystem tools such as **Hive**, **Pig**, **Cascading**, and **standard MapReduce**.
 
 ***
 ## Redshift
