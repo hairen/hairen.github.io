@@ -64,8 +64,8 @@ When launching an EC2 instance in a VPC you can:
 
 ### VPC Endpoint
 + Enables creation of a private connection between your VPC and another AWS service using its _private IP Address_. It currently supports endpoints for **S3** and **Dynamo DB**.
-+ Endpoints are supported within the **same region only**. You cannot create an endpoint between a VPC and a service in a **different** region.
-+ VPC endpoint always **takes precedence over** NAT Gateway or Internet Gateway. In the absence of VPC endpoint, request to S3 are routed to NAT Gateway or Internet Gateway **based on their existence in route table**.
++ <span style="color:blue">Endpoints are supported within the **same region only**. You cannot create an endpoint between a VPC and a service in a **different** region.</span>
++ <span style="color:blue">VPC endpoint always **takes precedence over** NAT Gateway or Internet Gateway. In the absence of VPC endpoint, request to S3 are routed to NAT Gateway or Internet Gateway **based on their existence in route table**.</span>
 + A **VPC endpoint policy** is an **IAM resource policy** that you attach to an endpoint when you create or modify the endpoint.
 
 ### NAT Instance as a Proxy
@@ -78,13 +78,16 @@ When launching an EC2 instance in a VPC you can:
 + You can use a network address translation (NAT) gateway to enable instances in a **private subnet** to connect to the internet or other AWS services, but **prevent the internet** from initiating a connection with those instances.
 + NOT Support **IPv6**.
 + Internet Gateway are **two-way** traffic.
-+ When creating NAT Gateway, there is an option to select **public subnet** in which NAT Gateway will be created. This **must be a public subnet** which has a route to internet through internet Gateway. If a private subnet is selected when creating NAT Gateway, it cannot route traffic to internet and hence the requests would fail.
++ <span style="color:blue">When creating NAT Gateway, there is an option to select **public subnet** in which NAT Gateway will be created. This **must be a public subnet** which has a route to internet through internet Gateway. If a private subnet is selected when creating NAT Gateway, it cannot route traffic to internet and hence the requests would fail.</span>
 + NAT Gateway doesn't have **security groups**.
++ <span style="color:blue">A NAT Gateway cannot send traffic over VPC endpoints, VPN connections, AWS Direct Connect, or VPC peering connections. If your instances in the priate subnet must access resources over a VPC endpoint, a VPN connection, or AWS Direct Connect, use the private subnet's route table to route the traffic directly to these devices.</span>
++ <span style="color:blue">NAT Gateway cannot be created without an elastic IP address.</span>
 
 ### Route table
 + Each subnet in your VPC **must be associated** with a route table.
   + A subnet can only be associated with **one** route table **at a time**, but you can associate **multiple** subnets with the **same route table**.
-  + Any route table _local route_ **cannot** be **edited** or **deleted**.
+  + <span style="color:blue">Any route table _local route_ **cannot** be **edited** or **deleted**</span>.
++ <span style="color:blue">Every route table contains a local route for communication within the VPC over IPv4. If your VPC has more than one IPv4 CIDR block, your route tables contain a local route for each IPv4 CIDR block. If you've associated an IPv6 CIDR block with your VPC, your route tables contain a local route for the IPv6 CIDR block. You cannot modify or delete these routes.</span>
 
 ### Bastion Host
 + Bastion hosts are instances that sit within your **public subnet** and are typically accessed using **SSH** or **RDP**.
@@ -93,6 +96,10 @@ When launching an EC2 instance in a VPC you can:
   + VPC Flow Logs is a feature that enables you to **capture information about the IP traffic going to and from network interfaces in your VPC**.
   + Flow log data can be published to Amazon **CloudWatch** Logs and Amazon **S3**.
   + After you've created a flow log, you can retrieve and view its data in the chosen destination.
+
+### DNS Support in Your VPC
++ <span style="color:blue">By default, custom VPCs does not have DNS Hostnames enabled. So when you launch an EC2 instance in custom VPC, you do not have private DNS name.</span>
++ <span style="color:blue">You VPC has attributes that determine whether your instance received public DNS hostnames, and whether DNS resolution through the Amazon DBS server is supported.</span>
 
 ***
 ## EC2
@@ -112,9 +119,10 @@ When launching an EC2 instance in a VPC you can:
 + A placement group is ideal for EC2 instances that require **high network** throughout and **low latency** across **a single AZ**.
 
 ### EC2 - _Bastion Host_
-+ Bastion host needs to be deployed in a **public** subnet
++ <span style="color:blue">Bastion host needs to be deployed in a **public** subnet.</span>
 + You can allow **RDP** or **SSH** or both based on the **Windows** or **Linux** instances you need to manage respectivly
 + Bostion host can have an Elastic IPv4 address attached, or also can be accessed using the auto-assigned public IPv4.
++ <span style="color:blue">A bastion host is a server whose purpose is to provide access to a private network from an external network, such as the Internet. It doesn't act as a proxy to route traffic from internet to private EC2 instance.</span>
 
 ### EC2 - _Options_
 + On Demand: Fixed rate by hour (by the second) with no commitment.
@@ -801,4 +809,7 @@ ELB monitoring can be achieved by:
 ## AWS OpsWorks
 + AWS OpsWorks is a configuration management service that provides managed instances of Chef and Puppet. Chef and Puppet are automation platforms that allow you to use code to automate the configurations of your servers. OpsWorks lets you use Chef and Puppet to automate how servers are configured, deployed, and managed across your Amazon EC2 instances or on-premises compute environments. OpsWorks has three offerings, AWS Opsworks for Chef Automate, AWS OpsWorks for Puppet Enterprise, and AWS OpsWorks Stacks.
 
-
+***
+## Network ACL rules
++ <span style="color:blue">A network ACL contains a numbered list of rules that we evaluate in order, starting with the lowest numbered rule, to determin whether traffic is allowed in or out of any subnet associated with the network ACL.</span>
++ <span style="color:blue">Rules are evaluated starting with the lowest numbered rule. As soon as a rule matches traffic, it's applied regardless of any higher-numbered rule that may contradict it.</span>
