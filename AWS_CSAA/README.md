@@ -63,10 +63,10 @@ When launching an EC2 instance in a VPC you can:
 + For private virtual interfaces, you need one private virtual interface for each VPC to connect to from the AWS Direct Connect connection, or you can use a _Direct Connect gateway_.
 
 ### VPC Endpoint
-+ Enables creation of a private connection between your VPC and another AWS service using its _private IP Address_. It currentl supports endpoints for **S3** and **Dynamo DB**.
-+ Endpoints are supported within the **same region only**. You cannot create an endpoint between a VPC and a service in a different region.
-+ VPC endpoint always **takes precedence over** NAT Gateway or Internet Gateway. In the absence of VPC endpoint, request to S3 are routed to NAT Gateway or Internet Gateway **based on** their existence in route table.
-+ A VPC endpoint policy is an **IAM resource policy** that you attach to an endpoint when you create or modify the endpoint. 
++ Enables creation of a private connection between your VPC and another AWS service using its _private IP Address_. It currently supports endpoints for **S3** and **Dynamo DB**.
++ Endpoints are supported within the **same region only**. You cannot create an endpoint between a VPC and a service in a **different** region.
++ VPC endpoint always **takes precedence over** NAT Gateway or Internet Gateway. In the absence of VPC endpoint, request to S3 are routed to NAT Gateway or Internet Gateway **based on their existence in route table**.
++ A **VPC endpoint policy** is an **IAM resource policy** that you attach to an endpoint when you create or modify the endpoint.
 
 ### NAT Instance as a Proxy
 + NAT instance in **VPC** can be used with a public IP or Elastic IP address.
@@ -76,7 +76,7 @@ When launching an EC2 instance in a VPC you can:
 
 ### NAT Gateways
 + You can use a network address translation (NAT) gateway to enable instances in a **private subnet** to connect to the internet or other AWS services, but **prevent the internet** from initiating a connection with those instances.
-+ NOT Support IPv6.
++ NOT Support **IPv6**.
 + Internet Gateway are **two-way** traffic.
 + When creating NAT Gateway, there is an option to select **public subnet** in which NAT Gateway will be created. This **must be a public subnet** which has a route to internet through internet Gateway. If a private subnet is selected when creating NAT Gateway, it cannot route traffic to internet and hence the requests would fail.
 + NAT Gateway doesn't have **security groups**.
@@ -90,7 +90,7 @@ When launching an EC2 instance in a VPC you can:
 + Bastion hosts are instances that sit within your **public subnet** and are typically accessed using **SSH** or **RDP**.
 
 ### VPC Flow Logs
-  + VPC Flow Logs is a feature that enables you to capture information about the IP traffic going to and from network interfaces in your VPC.
+  + VPC Flow Logs is a feature that enables you to **capture information about the IP traffic going to and from network interfaces in your VPC**.
   + Flow log data can be published to Amazon **CloudWatch** Logs and Amazon **S3**.
   + After you've created a flow log, you can retrieve and view its data in the chosen destination.
 
@@ -107,7 +107,7 @@ When launching an EC2 instance in a VPC you can:
 
 ### EC2 - _Placement Groups_
 + Is a feature that allows involved EC2 instances to communicate via **high bandwidth** and **low latency** connections **within an AZ**.
-+ Placement groups **MUST** have all instances in the **SAME** AZ (only one single)
++ Placement groups **MUST** have all instances in the **SAME AZ** (only one single)
 + You can use **Enhanced networking instances** in **Placement groups**.
 + A placement group is ideal for EC2 instances that require **high network** throughout and **low latency** across **a single AZ**.
 
@@ -124,7 +124,7 @@ When launching an EC2 instance in a VPC you can:
 
 ### EC2 - _Status Checks_
 + **Reboot** assumes that instance is in running state and **does not change the host**. **'Impaired'** means **host** is not working properly.
-+ If EC2 status checks detect a software or hardwar on the underlying host, it will make the instance(Guest EC2 instances) as **impaired**.
++ If EC2 status checks detect a software or hardwar on the underlying host, it will make the instance (Guest EC2 instances) as **impaired**.
 + For EBS backed instances **stopping and restarting** the instance will cause it to **launch on a new host**, which will fix the problem.
 + For Instance-store backed instances, stopping the instance is not an option, and what you can do is to **_re-launch_ the instance**, but first create an AMI snapshot (or use the last created AMI snapshot) to launch a new instance.
 
@@ -133,11 +133,11 @@ When launching an EC2 instance in a VPC you can:
   + They both and the EC2 instance MUST be in the **same** AZ.
 + By default, network interfaces created "**automatically**" during EC2 instance launch by AWS console, are **terminated when the instance is terminated**.
   + **Does not include eth1** that you can add during launch (manually added).
-+ Network interfaces created by **CLI** are **NOT** terminated** **automatically** when the EC2 instance terminates.
++ Network interfaces created by **CLI** are **NOT** terminated **automatically** when the EC2 instance terminates.
 
 ### EC2 - _Instance Access_
 + You have root access with **OpsWorks**, **EC2**, and **Elatic Bean Stalk**, **EMR**.
-+ You could only add an IAM at the time you launch an instance.
++ You could **only add an IAM** at the time you launch an instance.
   + If you wanted to add an IAM role to a running instance, **you could not do it**.
 + Now you can add an IAM role to a running EC2 instance.
   + So depending on the exam question choices:
@@ -193,7 +193,7 @@ When launching an EC2 instance in a VPC you can:
 + You can only specify allow rules, but not deny rules.
 
 ### EBS vs Instance Store
-+ All AMIs are categorized as either backed by Amazon EBS or backed by instance store.
++ All AMIs are categorized as either backed by Amazon **EBS** or backed by **instance store**.
 + For EBS Volumes: The root decice from an instance launched from the AMI is an Amazon EBS volume created from an Amazon EBS snapshot.
 + For Instance Store Volumes: The root device for an instance launched from the AMI is an instance store volumne created from a template stored in Amazon S3.
 + Instance Store Volumes are sometimes called **Ephemeral Storage**.
@@ -231,7 +231,7 @@ When launching an EC2 instance in a VPC you can:
   + Remember that, Instance Store is the virtual hard disk space allocated to the instance on the local host.
   + However, note that **not all** new AWS EC2 instance families/types support instance store.
 
-### EBS - _Data Encruption at Rest_
+### EBS - _Data Encryption at Rest_
 + EBS volume encryption is **NOT** supported on some but not all instance types.
 + EBS volume encryption is **NOT** supported on **Free tier instances**.
 + There are many ways you can encrypt data on an EBS volume at rest, while the volume is attached to an EC2 instance
@@ -289,7 +289,7 @@ The follwing parameters can influence auto scaling decisions based on their valu
 ### ASG - Launch Configuration
 ![AWS Auto Scaling](https://i2.wp.com/jayendrapatil.com/wp-content/uploads/2016/03/AWS-Auto-Scaling-Configurations.png?w=1312)
 
-+ It's similar to EC2 configuartion and involves selection of the AMI, **instance type**, a **key pair**, one or more **security groups**, and a **block device mapping**.
++ It's similar to EC2 configuartion and involves selection of the **AMI**, **instance type**, a **key pair**, one or more **security groups**, and a **block device mapping**.
 + Launch configuration can be associated **multiple** Auto Scaling Groups.
 + Launch configuartion **cannot** be modified after created.
 + CLI or an API enabled **Detailed** monitoring, while AWS Console enabled **Basic** monitoring by default.
@@ -310,15 +310,6 @@ The follwing parameters can influence auto scaling decisions based on their valu
 
 ![The following flow diagram illustrates how the default termination policy works.](https://docs.aws.amazon.com/autoscaling/ec2/userguide/images/termination-policy-default-flowchart-diagram.png)
 
-### Dynamic (Event-based) Scaling
-+ The following parameters can influence auto scaling decisions based on their values
-  + The cool down timer
-    + It controls the period of time after a scaling event has happened to the time another scaling event can be initiated (both scale out and scale in are affected).
-  + The frequency of the Cloud Watch alarm fetching the monitored object's data
-    + The longer it is, the less potential scaling events, and vice versa.
-  + The alarm thresholds based on which a scale-out or scale-in events can be triggered.
-    + Lowering the thresholds may cause more scaling out, and increasing the thresholds may cause more scaling-in.
-
 ***
 ## RDS
 ### RDS
@@ -332,7 +323,7 @@ The follwing parameters can influence auto scaling decisions based on their valu
 > + Provides elasticity & scalability by enabling MySQL, MariaDB, or PostgreSQL Read Replicas to increase read scaling.
 > + Supports MySQL, MariaDB, PostgreSQL, Oracle, Microsoft SQL Server, and the new, MySQL-compatible **Amazon Aurora DB** engine.
 > + In addition to the security in the database package, IAM users and permissions can help to control who has access to the RDS databases.
-> + Databases can be further protected by putting them in a VPC, using SSL for data in transit and encryption for data in rest
+> + Databases can be further protected by putting them in a VPC, using SSL for data in transit and encryption for data in rest.
 > + However, as it is a managed service, **shell (root ssh) access to DB instances is not provided**, and this restricts access to certain system procedures and tables that require advanced privileges.
 
 ### RDS - _DB Instance_
@@ -452,7 +443,7 @@ The follwing parameters can influence auto scaling decisions based on their valu
 
 ### S3 Security
 + You can use _access control mechanisms_ such as **bucket policies** and **Access Control Lists** (ACLs) to selectively grant permissons to users and groups of users.
-+ You can also securly upload/download your data to Amazon S3 via **SSL** endpoints using the HTTPS protocol, or by using **Server-Side Encryption (SSE)** or **Client-Side Encryption**.
++ You can also securely upload/download your data to Amazon S3 via **SSL** endpoints using the HTTPS protocol, or by using **Server-Side Encryption (SSE)** or **Client-Side Encryption**.
 + **Access log** records can be used for audit purposes and contain details about the request, such as the request type, the resources specified in the request, and the time and date the request was processed.
 + By **AWS CloudTrail Data Events**, customers who need to capture IAM/user identity information in their logs.
 
@@ -550,7 +541,7 @@ _**Controlling Access to an API in API Gateway**_
 ### Lambda - _Event sources_
 + Event sources can be both push and pull soruces
   + Service like S3, SNS publish events to Lambda by invoking the cloud function directly.
-  + Lambda can also poll resouces in services like _Kinesis stream_ that do not publish evetns to Lambda.
+  + Lambda can also poll resouces in services like _Kinesis stream_ that do not publish events to Lambda.
 + Event sources can grouped into:
   + Regular AWS services:
     + Also referred to as Push model
@@ -577,7 +568,7 @@ _**Controlling Access to an API in API Gateway**_
 
 ***
 ## Redshift
-+ It is a fully maanged, fast and powerfull, petabyte scale data warehouse service.
++ It is a fully managed, fast and powerfull, petabyte scale data warehouse service.
 + Support encryption of data "at rest" using hardware accelerated AES-256 bits
   + By default, AWS Redshift takes care of encryption key management
   + You can choose to manage your own keys through HSM (Hardware Security Modules), or AWS KMS (Key Management Service).
@@ -601,23 +592,6 @@ _**Controlling Access to an API in API Gateway**_
 + EMR is ideal for
   + processing and transforming **unstructured** or **semi-structured data** to bring in to Amazon Redshift and
   + for data sets that are relatively **transitory**, **not stored for long-term use**.
-
-### Kinesis vs SQS
-> + Kinesis Streams enables real-time processing of streaming big data while SQS offers a reliable, highly scalable hosted queue for storing messages and move data between distributed application components.
-> + Kinesis provides ordering of records, as well as the ability to read and/or replay records in the same order to multiple Amazon Kinesis Applications while SQS does not guarantee data ordering and provides at least once delivery of messages.
-> Kinesis stores the data up to **24 hours**, by default, and can be extended to **7 days** while SQS stores the message up to **4 days**, by default, and can be configured from **1 minute** to **14 days** but clears the message once deleted by the consumer.
-> + Kineses and SQS both guarantee at-least once delivery of message.
-> + Kinesis supports multiple consumers while SQS allows the messages to be delivered to only one consumer at a time and requires multiple queues to deliver message to multiple consumers.
-> + Kinesis use cases requirements
->   + **Ordering** of records.
->   + Ability to consume records **in the same order** a few hours later
->   + Ability for **multiple** applications to consume the same stream concurrently
->   + Routing related records to the **same** record processor (as in streaming MapReduce)
-> + SQS uses cases requirements
->   + Messaging semantics like message-level ack/fail and visibility timeout
->   + Leveraging SQS’s ability to scale transparently
->   + Dynamically increasing concurrency/throughput at read time
->   + Individual message delay, which can be delayed
 
 ***
 ## Kinesis
