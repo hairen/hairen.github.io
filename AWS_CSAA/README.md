@@ -219,6 +219,7 @@ When launching an EC2 instance in a VPC you can:
 + Snapshots are **region** specific.
 + Snapshot of encrypted volumes are also encrypted.
 + Creating an EBS volume from an encrypted snapshot will result it an encrypted volume
++ <span style="color:blue">You can use Amazon Data Lifecycle Mangager (Amazon DLM) to automate the creation, retention, and deletion of snapshots taken to backup your Amazon EBS volumes.</span>
 
 ### EBS Volume Access
 + Snapshots are **not** stored under **customer's own S3 buckets**. But, when you create AMI from instance store, you can view it under customer's own S3 buckets.
@@ -232,6 +233,7 @@ When launching an EC2 instance in a VPC you can:
     + This will protect your access to the snapshot and created volume of it in case:
       + The key used to encrypt the original shared snapshot is compromised.
       + OR, if the original snapshot owner revokes your rights to the original snapshot encryption key.
++ <span style="color:blue">There is no direct way to encrypt an existing unencrypted volume, or to remove encryption from an encrypted volume. However, you can migrate data between encrypted and unencrypted volumes.</span>
 
 ### IOPS Performance - Instance Store vs. EBS
 + Use Instance Store instead of EBS
@@ -452,7 +454,7 @@ The follwing parameters can influence auto scaling decisions based on their valu
 ### S3 Security
 + You can use _access control mechanisms_ such as **bucket policies** and **Access Control Lists** (ACLs) to selectively grant permissons to users and groups of users.
 + You can also securely upload/download your data to Amazon S3 via **SSL** endpoints using the HTTPS protocol, or by using **Server-Side Encryption (SSE)** or **Client-Side Encryption**.
-+ **Access log** records can be used for audit purposes and contain details about the request, such as the request type, the resources specified in the request, and the time and date the request was processed.
++ <span style="color:blue">**Access log** records can be used for audit purposes and contain details about the request, such as the request type, the resources specified in the request, and the time and date the request was processed. In access logging, you, as an API developer, want to log who has accessed your API and how the caller accessed the API.</span>
 + By **AWS CloudTrail Data Events**, customers who need to capture IAM/user identity information in their logs.
 
 ### Options for encrypting data stored on Amazon S3
@@ -461,9 +463,9 @@ The follwing parameters can influence auto scaling decisions based on their valu
 + **SSE-KMS**: Enables you to use **AWS Key Management Service** (AWS KMS) to manage your encryption keys.
 + **Using an encryption client library**: Such as the Amazon S3 Encryption Client, you retain control the keys and complete the encryption and decyption of objects client-side using an encryption library of your choice.
 
-### S3 bucket properties
+### <span style="color:blue">S3 bucket properties</span>
 + Versioning
-+ Server Access Logging
++ Server Access Logging - It provides detailed records for the requests that are made to a bucket.
 + Static Web Hosting
 + Object-level logging
 + Tags
@@ -480,9 +482,15 @@ The follwing parameters can influence auto scaling decisions based on their valu
   + Stored volumes (low-latency access)
 + Tape Gateway: With a tape gateway, you can cost-effectively and durably **archive backup** data in Amazon **Glacier**. 
 
-### Amazon S3 Data Consistency Model
-+ Amazon S3 provides **read-after-write consistency** for **PUTS** of **new** objects in your S3 bucket in all regions with one caveat. 
+### <span style="color:blue"> Amazon S3 Data Consistency Model </span>
++ Amazon S3 provides **read-after-write consistency** for **PUTS** of **NEW** objects in your S3 bucket in all regions with one caveat. 
 + Amazon S3 offers **eventual consistency for overwrite PUTS and DELETES** in all regions.
++ Amazon EFS provides the open-after-close consistency semantics that applications expect from NFS.
++ DynamoDb supports eventually consisten and strongly consistent reads.
+
+### <span style="color:blue"> Amazon S3 Data Consistency Model </span>
++ Cross-region replication is a bucket-level configuartion that enables automatic, asychronous copyting of objects acrocss buckets in different AWS Regions.
+
 
 ### Minimum and Maximum file sizes that can be stored in S3 respectively: **0 (not 1) Bytes** and **5 terabytes**
 
@@ -517,7 +525,7 @@ Stage variables are name-value pairs that you can defines as configuration attri
 _**API Gateway Access Logging**_
 In API Gateway access logging, you, as an API developer, want to log who has accessed your API and how the caller accessed the API.
 
-_**Controlling Access to an API in API Gateway**_
+<span style="color:blue">_**Controlling Access to an API in API Gateway**_</span>
 + Resouce policies
 + Standard AWS IAM roles and policies
 + Cross-origin resources sharing (CORS)
