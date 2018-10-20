@@ -487,6 +487,7 @@ The follwing parameters can influence auto scaling decisions based on their valu
 + Amazon S3 offers **eventual consistency for overwrite PUTS and DELETES** in all regions.
 + Amazon EFS provides the open-after-close consistency semantics that applications expect from NFS.
 + DynamoDb supports eventually consisten and strongly consistent reads.
++ Amazon DynamoDB global tables provide a fully managed solution for deploying a multi-region, multi-master database, without having to build and maintain your own replication solution.
 
 ### <span style="color:blue"> Amazon S3 Data Consistency Model </span>
 + Cross-region replication is a bucket-level configuartion that enables automatic, asychronous copyting of objects acrocss buckets in different AWS Regions.
@@ -547,6 +548,17 @@ In API Gateway access logging, you, as an API developer, want to log who has acc
 + Lambda stores code in S3 and encrypts it at rest and performs additional intergrity checkc while the code is in use.
 + Each AWS Lambda function runs in its own isolated environment, with its own resources and file system view.
 
+### <span style="color:blue">Lambda - _Supporting poll-based servers_</span>
++ Amazon Kinesis
++ Amazon DynamoDB
++ Amazon SQS
+
+### <span style="color:blue">Lambda - _cross-account permissions_</span>
++ You can also grant cross-account permissions using the **function policy**.
+
+### <span style="color:blue">Lambda - _Store sensitive information_</span>
++ You can create a Lambda Function using **Environment Variables** to **Store Senstive information**.
+
 ### Lambda - _Support codes written in_
 + Node.js
 + Python
@@ -581,6 +593,10 @@ In API Gateway access logging, you, as an API developer, want to log who has acc
 + Scheduled Events
 + AWS Config
 + Amazon API Gateway
+
+### <span style="color:blue">Update-function-code</span>
++ Updates the code for the specified Lambda function. This operation must only be used on an existing Lambda function and cannot be used to update the function configuration.
++ If you are using the versioning feature, note this API will always update the $LATEST version of your Lambda function. 
 
 ***
 ## Redshift
@@ -652,6 +668,12 @@ In API Gateway access logging, you, as an API developer, want to log who has acc
 
 ***
 ## Route 53
+> Amazon Route 53 is a highly available and scalable Domain Name System (DNS) web service. You can use Route 53 to perform three main functions:
+> + Register domain names
+> + Route internet traffic to the resources for your domain
+> + Check the health of your resources.
+
+
 ### NS Records
 NS stands for Name Server records. They are used by Top Level Domain servers to direct traffic to the Content DNS server which contains the authoritative DNS records.
 
@@ -678,6 +700,12 @@ A Canoical(权威性) Name (CName) can be used to resolve one domain name to ano
 + Lantency-based Routing Policy
 + Failover Routing Policy
 + Geolocation Routing Policy
+
+### Route 53 Health Checks
++ Health checks that monitor an endpoint
++ Health checks that monitor other health checks
++ Health checks that monitor Cloud alarms.
+  
 
 ***
 ## ELB
@@ -764,7 +792,6 @@ ELB monitoring can be achieved by:
   + SSL 2.0
   + It does not support TLS 1.3 or SSL 2.0 (which is deprecated).
 
-### ELB - Connection Draining
 + Is disabled by default
 + When enabled, the ELB when identifying unhealthy instances, it will wait for a period of 300 seconds (by default), for the in-flight sessions to this EC2 back end instance to complete
   + If the in-flight sessions are not completed before the maximum time (300 seconds configurable between 1 - 3600 seconds), the ELB will force termination of these sessions.
@@ -779,6 +806,18 @@ ELB monitoring can be achieved by:
     + ELB service can scale and keep up with traffic increase, if you traffic increases at 50% in step or linear form every 5 mins.
 + ELB Pre-Warm
   + If your traffic increases faster than this, you need to contact AWS to pre-warm ELB nodes for your traffic needs.
+
+### ELB - Target Type
+The following are the possible target types:
++ Instance : The targets are specified by instance ID.
++ IP : The targets are specified by IP address.
+
+###  Monitor your Application Load Balancers
++ CloudWatch metrics
++ Access Logs
++ Request tracing
++ CloudTrail Logs
+
 
 ### Classic Load Balancer - Logging mechaism
 + It can be used to capture detailed information about requests sent to your load balancer.
@@ -821,3 +860,11 @@ ELB monitoring can be achieved by:
 ## Network ACL rules
 + <span style="color:blue">A network ACL contains a numbered list of rules that we evaluate in order, starting with the lowest numbered rule, to determin whether traffic is allowed in or out of any subnet associated with the network ACL.</span>
 + <span style="color:blue">Rules are evaluated starting with the lowest numbered rule. As soon as a rule matches traffic, it's applied regardless of any higher-numbered rule that may contradict it.</span>
+
+***
+## CloudFront events
+Your functions will automatically trigger in response to the following Amazon CloudFront events.
++ Viewer Request
++ Viewer Response
++ Origin Request
++ Origin Response
