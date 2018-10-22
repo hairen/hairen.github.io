@@ -213,6 +213,12 @@ When launching an EC2 instance in a VPC you can:
 + By default EBS volumes are set to '**Delete on Termination**', meaning they persist only if instructed.
 ![](https://i0.wp.com/jayendrapatil.com/wp-content/uploads/2016/04/screen-shot-2016-04-06-at-6-36-02-am.png?w=1312)
 
+### <span style="color:blue">EC2 - Classic vs EC2 - VPC</span>
+> + EC2-Classic: AWS **releases** the **public** and **private** IPv4 addresses for the instance when you stop the instance, and assign new ones when you restart it.
+> + EC2-VPC: The instance **retains** its **private** IPv4 addresses and any IPv6 addresses when stop and restart. AWS **releases** the **public** IPv4 address and assigns a new one when you restart it.
+> + EC2-Classic: AWS disassociates any **Elastic IP** address that's associated with the instance. You're charged for **Elastic IP** addresses that aren't associated with an instance. When you restart the instance, you must associate the **Elastic IP** address with the instance; AWS doesn't do this automatically.
+> + EC2-VPC: The instance retains its associated **Elastic IP** addresses. You're charged for any **Elastic IP** addresses associated with a stopped instance
+
 ***
 ## EBS
 ### EBS Snapshots - _Characteristics_
@@ -486,7 +492,7 @@ The follwing parameters can influence auto scaling decisions based on their valu
 + Amazon S3 provides **read-after-write consistency** for **PUTS** of **NEW** objects in your S3 bucket in all regions with one caveat. 
 + Amazon S3 offers **eventual consistency for overwrite PUTS and DELETES** in all regions.
 + Amazon EFS provides the open-after-close consistency semantics that applications expect from NFS.
-+ DynamoDb supports eventually consisten and strongly consistent reads.
++ DynamoDB supports eventually consisten and strongly consistent reads.
 + Amazon DynamoDB global tables provide a fully managed solution for deploying a multi-region, multi-master database, without having to build and maintain your own replication solution.
 
 ### <span style="color:blue"> Amazon S3 Data Consistency Model </span>
@@ -558,6 +564,7 @@ In API Gateway access logging, you, as an API developer, want to log who has acc
 
 ### <span style="color:blue">Lambda - _Store sensitive information_</span>
 + You can create a Lambda Function using **Environment Variables** to **Store Senstive information**.
++ When you create or update Lambda functions that use environment variables, AWS Lambda encrypts them using the AWS Key Management Service (KMS ket). When your Lambda function is invoked, those values are decrypted and made available to Lambda code.
 
 ### Lambda - _Support codes written in_
 + Node.js
@@ -637,6 +644,7 @@ In API Gateway access logging, you, as an API developer, want to log who has acc
   + This allows for quicker response times when a business question comes up, which in turn should help the user respond to issues and make business decisions faster.
   + The produce of ad hoc analysis is typically a statistical model, analytic report, or other type of data summary.
   + Ad hoc analysis may be used to create a report that does not already exist, or drill deeper into a static report tot get details about accounts, transactions, or records.
+  + It can capture, transfomr, and load streaming data into **Amazon S3**, **Redshift**, **Elasticsearch Service**, and **Splunk**, enabling near real-time analytics with existing business intelligence tools and dashboards your're already using today.
   
 ***
 ## Amazon Elastic MapReduce (EMR)
@@ -761,7 +769,7 @@ ELB monitoring can be achieved by:
 
 ### ELB
 + By default, an ELB enabled to load balance among multiple AZs, will distribute the traffic among the AZ evenly, disregarding the number of registered backend EC2 instance in each AZ.
-+ Enabling ELB cross zone load balacning (disabled by default) ensures that the ELB will distribute traffic among the multi AZ registered backend EC2 instances evently.
++ Enabling ELB cross zone load balancing (disabled by default) ensures that the ELB will distribute traffic among the multi AZ registered backend EC2 instances evently.
 + ELB is a Region specific AWS Service.
 + You can't load balance across regions using ELB alone.
 + All that it takes to enable an ELB in an AZ (in the same region as the ELB), is to enable a subnet for the ELB in that AZ.
@@ -829,6 +837,7 @@ The following are the possible target types:
 ## AWS ElastiCache
 + ElastiCache is available in two flavours: **Memcached** and **Redis**
 + ElastiCache currently allows access only from the EC2 network and cannot be accessed from outside networks like on-premises servers.
++ It's **fully** managed services.
 
 ***
 ## AWS CloudTrail
@@ -844,13 +853,15 @@ The following are the possible target types:
 >       + receive log files from all regions in a single S3 bucket and optionally in a CloudWatch Logs log group.
 >       + create trails in regions not used often to monitor for unusual activity
 >     + A trail that applies to one region
->       + A S3 bucket can be specified that receives events only from that region and it can be in any region that you specify.
->       +Additional individual trails created that apply to specific regions, those trails can deliver event logs to a single S3 bucket.
+>       + A **S3** bucket can be specified that receives events only from that region and it can be in any region that you specify.
+>       + Additional individual trails created that apply to specific regions, those trails can deliver event logs to a single S3 bucket.
 > + A trail is a configuration that enables delivery of CloudTrail events to an Amazon **S3 bucket**, **CloudWatch Logs**, and **CloudWatch Events**.
+> + <span style="color: blue;">CloudTrail provides event history of your AWS account activity, including actions taken through the AWS Management Console, AWS SDKs, command line tools, and other AWS services. This event history simplifies security analysis, resource change tracking, and troubleshooting.</span>
 
 ***
 ## CloudFormation
-+ AWS CloudFormation provides a common language for you to describe and provision all the infrastructure resources in your cloud environment. CloudFormation allows you to use a simple text file to model and provision, in an automated and secure manner, all the resources needed for your applications across all regions and accounts. This file serves as the single source of truth for your cloud environment. 
++ AWS CloudFormation provides a **common language** for you to describe and provision all the infrastructure resources in your cloud environment. CloudFormation allows you to use a simple text file to model and provision, in an automated and secure manner, all the resources needed for your applications across all regions and accounts. This file serves as the single source of truth for your cloud environment. 
++ <span style="color:blue">There is no additional charge for AWS CloudFormation. You only pay for the AWS resources that are created.</span>
 
 ***
 ## AWS OpsWorks
@@ -858,7 +869,7 @@ The following are the possible target types:
 
 ***
 ## Network ACL rules
-+ <span style="color:blue">A network ACL contains a numbered list of rules that we evaluate in order, starting with the lowest numbered rule, to determin whether traffic is allowed in or out of any subnet associated with the network ACL.</span>
++ <span style="color:blue">A network ACL contains a numbered list of rules that we evaluate in order, starting with the lowest numbered rule, to determine whether traffic is allowed in or out of any subnet associated with the network ACL.</span>
 + <span style="color:blue">Rules are evaluated starting with the lowest numbered rule. As soon as a rule matches traffic, it's applied regardless of any higher-numbered rule that may contradict it.</span>
 
 ***
@@ -868,3 +879,27 @@ Your functions will automatically trigger in response to the following Amazon Cl
 + Viewer Response
 + Origin Request
 + Origin Response
+
+***
+## Amazon EMR
++ <span style="color:blue">Amazon EMR is a web service that enables businesses, researchers, data analysts, and developers to easily and cost-effectively process vast amounts of data. It utilizes a hosted Hadoop framework running on the web-scale infrastructure of Amazon Elastic Compute Cloud (Amazon EC2) and Amazon S3.</span>
+
+***
+## Amazon CloudWatch
++  CloudWatch has available (**by default**) Amazon EC2 Metrics for your to use for monitoring **CPU utilization**, **Network utilization**, **Disk performance and Disk Reads/Writes**. In case that you need to monitor the below items, you need to prepare a **custom** metric using a Perl or other shell script, as there are no ready to use  metrics for these:
+  +  Memery utilization
+  +  disk swap utilization
+  +  disk space utilization
+  +  page file utilization
+  +  log collection
+
+
+***
+## Questions & Answers
++ If you use PuTTY to connect to your instance via SSH and get either of the following errors, _Error: Server refused our key_ or _Error: No supported authentication methods available_, verify that you are connecting with the appropriate **user name** for your **AMI**. Enter the user name in the User name box in the **PuTTY** Configuration window.
++ You should also verify that your **private key** (.pem) file has been correctly **converted** to the format recognized by **PuTTY (.ppk)**.
++ By default, your instance is enabled for basic monitoring. You can optionally enable detailed monitoring. **Basic** - Data is avaiable automatically in **5-minute** periods at **no charge**. **Detailed** - Data is available in **1-minute** period for an **additional cost**.
++ ElasticCache and DynamoDB are **fully** managed services; Amazon Relational Database Service is a managed database service, which means that you have **partial** control of the underlying database server.
++ Each instance can be assigned up to **five** security groups.
++ **Amazon DynamoDB Accelerator** (DAX) is a **fully** managed, highly avaiable, in-memory cache that can reduce Amazon DynamoDB response times **from milliseconds to microseconds**, even at millions of requests per second.
++ You can secure the privacy of your data in AWS, both at rest and in-transit, through encryption. If your data is stored in EBS Volumns, you can enable EBS Encryption and if it is stored in S3, you can enable client-side and server-side encryption.
