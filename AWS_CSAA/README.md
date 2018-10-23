@@ -458,7 +458,7 @@ The follwing parameters can influence auto scaling decisions based on their valu
 + **Synchronous** Upload and **Asynchronous** Retrieval
 
 ### S3 Security
-+ You can use _access control mechanisms_ such as **bucket policies** and **Access Control Lists** (ACLs) to selectively grant permissons to users and groups of users.
++ You can use _access control mechanism_ such as **bucket policies**(bucket wide) and **Access Control Lists** (ACLs, up to individual objects) to selectively grant permissons to users and groups of users.
 + You can also securely upload/download your data to Amazon S3 via **SSL** endpoints using the HTTPS protocol, or by using **Server-Side Encryption (SSE)** or **Client-Side Encryption**.
 + <span style="color:blue">**Access log** records can be used for audit purposes and contain details about the request, such as the request type, the resources specified in the request, and the time and date the request was processed. In access logging, you, as an API developer, want to log who has accessed your API and how the caller accessed the API.</span>
 + By **AWS CloudTrail Data Events**, customers who need to capture IAM/user identity information in their logs.
@@ -865,7 +865,7 @@ The following are the possible target types:
 
 ***
 ## AWS OpsWorks
-+ AWS OpsWorks is a configuration management service that provides managed instances of Chef and Puppet. Chef and Puppet are automation platforms that allow you to use code to automate the configurations of your servers. OpsWorks lets you use Chef and Puppet to automate how servers are configured, deployed, and managed across your Amazon EC2 instances or on-premises compute environments. OpsWorks has three offerings, AWS Opsworks for Chef Automate, AWS OpsWorks for Puppet Enterprise, and AWS OpsWorks Stacks.
++ AWS OpsWorks is a configuration management service that provides managed instances of **Chef** and **Puppet**. Chef and Puppet are automation platforms that allow you to use code to automate the configurations of your servers. OpsWorks lets you use **Chef** and **Puppet** to automate how servers are configured, deployed, and managed across your Amazon EC2 instances or on-premises compute environments. OpsWorks has three offerings, AWS Opsworks for Chef Automate, AWS OpsWorks for Puppet Enterprise, and AWS OpsWorks Stacks.
 
 ***
 ## Network ACL rules
@@ -874,11 +874,12 @@ The following are the possible target types:
 
 ***
 ## CloudFront events
-Your functions will automatically trigger in response to the following Amazon CloudFront events.
-+ Viewer Request
-+ Viewer Response
-+ Origin Request
-+ Origin Response
++ Your functions will automatically trigger in response to the following Amazon CloudFront events.
+  + Viewer Request
+  + Viewer Response
+  + Origin Request
+  + Origin Response
++ CloudFront content can be secured by using X.509 certificates. E.g. you can secure access to a CloudFront video by sharing the link using X.509 certificates.
 
 ***
 ## Amazon EMR
@@ -903,3 +904,9 @@ Your functions will automatically trigger in response to the following Amazon Cl
 + Each instance can be assigned up to **five** security groups.
 + **Amazon DynamoDB Accelerator** (DAX) is a **fully** managed, highly avaiable, in-memory cache that can reduce Amazon DynamoDB response times **from milliseconds to microseconds**, even at millions of requests per second.
 + You can secure the privacy of your data in AWS, both at rest and in-transit, through encryption. If your data is stored in EBS Volumns, you can enable EBS Encryption and if it is stored in S3, you can enable client-side and server-side encryption.
++ Transferring data from an **EC2** instance **to** Amazon S3, Glacier, DynamoDB, SES, SQS, SimpleDB in the same AWS Region has **no cost** at all.
++ The word _ephemeral_ means short-lived or temporary in the English dictionary.
++ Always remember that the messages in the SQS queue will continue to exist even after the EC2 instance has processed it, until you delete that message.
++ Amazon RDS Multi-AZ deployments provide enhanced availablility and durability for Database Instances, making them a natural fit for production database workloads. When you provision a Multi-AZ DB instance, Amazon RDS autmatically creates a primary DB Instance and synchronously replicates the data to a standby instance in a different AZ. Each AZ runs on its own physically distinct, independent infrastructure, and is engineered to be highly reliable.
++ In case of an infrastruture failure, Amazon RDS performs an automatic failover to the standnby (or to a read replica in the case of Amazon Aurora), so that you can resume database operations as soon as the failover is complete.
++ You can store session state data on both DynamoDB and ElastiCache. These AWS services provide high performance storage of key-value pairs which can be used to build a highly available web application.
