@@ -273,6 +273,13 @@ When launching an EC2 instance in a VPC you can:
 ### EBS - Optimized
 + EBS-optimized instances enable you to get consistently high performance for the EBS volumes by **eliminating contention between EBS I/O and other network traffic from the instance**.
 
+### EBS volumne
++ When you create an EBS volume in an Availability Zone, it is automatically replicated within that zone to prevent data loss due to failure of any single hardware component.
++ An EBS volume can only be attached to one EC2 instance at a time.
++ After you create a volume, you can attach it to any EC2 instance in the same Availability Zone
++ An EBS volume is off-instance storage that can persist independently from the life of an instance.
++ EBS volumes support live configuration changes while in production which means that you can modify the volume type, volume size, and IOPS capacity without service interruptions.
+
 ***
 ## ASG
 ### EC2 Status Checks
@@ -564,7 +571,7 @@ In API Gateway access logging, you, as an API developer, want to log who has acc
 
 ### <span style="color:blue">Lambda - _Store sensitive information_</span>
 + You can create a Lambda Function using **Environment Variables** to **Store Senstive information**.
-+ When you create or update Lambda functions that use environment variables, AWS Lambda encrypts them using the AWS Key Management Service (KMS ket). When your Lambda function is invoked, those values are decrypted and made available to Lambda code.
++ When you create or update Lambda functions that use environment variables, AWS Lambda encrypts them using the **AWS Key Management Service (KMS ket)**. When your Lambda function is invoked, those values are decrypted and made available to Lambda code.
 
 ### Lambda - _Support codes written in_
 + Node.js
@@ -652,7 +659,7 @@ In API Gateway access logging, you, as an API developer, want to log who has acc
 
 ***
 ## Redshift
-+ Redshift is a columnar analytical data warehouse (analytical database).
++ Redshift is a **columnar** analytical data warehouse (analytical database).
   + It isn't designed to be continuously loaded, rather, a small number of concurrent queries performing large scans of data.
   + Not optimized for ad hoc querying.
   + It supports **CloudHSM** (Cloud Hardware System Model), **RDS** also supports HSM.
@@ -660,9 +667,9 @@ In API Gateway access logging, you, as an API developer, want to log who has acc
 ### Kinesis vs SQS
 + Kinesis Streams enables **real-time** processing of streaming big data while SQS offers a **reliable**, **highly scalable hosted queue** for storing messages and move data between distributed application components
 + Kinesis provides **ordering of records**, as well as the ability to read and/or replay records in the same order to multiple Amazon Kinesis Applications while **SQS does not guarantee data ordering** and provides at least once delivery of messages
-+ Kinesis stores the data up to 24 hours, by default, and can be extended to 7 days while SQS stores the message up to 4 days, by default, and can be configured from 1 minute to 14 days but clears the message once deleted by the consumer
++ Kinesis stores the data up to **24 hours**, by default, and can be extended to **7 days** while SQS stores the message up to **4 days**, by default, and can be configured from **1 minute** to **14 days** but clears the message once deleted by the consumer
 + Kineses and SQS both guarantee at-least once delivery of message
-+ Kinesis supports **multiple consumers** while SQS allows the messages to be delivered to **only one consumer** at a time and requires multiple queues to deliver message to multiple consumers
++ Kinesis supports **multiple consumers**, while SQS allows the messages to be delivered to **only one consumer** at a time and requires multiple queues to deliver message to multiple consumers
 + Kinesis use cases requirements
   + Ordering of records.
   + Ability to consume records in the same order a few hours later
@@ -722,7 +729,7 @@ ELB monitoring can be achieved by:
   + AWS Cloud Watch:
     + AWS ELB service sends ELB metrics to cloud watch every "One minute"
     + ELB service sends these metrics only if there are requests flowing through the ELB
-    + AWS Cloud Watch can be used to trigger an SNS notification if a threshold you define is reached
+    + AWS Cloud Watch can be used to trigger an **SNS** notification if a threshold you define is reached
   + Access logs:
     + Disabled by default
     + You can obtain request information such as requester, time of request, requester IP, request type ... etc.
@@ -874,25 +881,25 @@ The following are the possible target types:
 
 ***
 ## CloudFront events
-+ Your functions will automatically trigger in response to the following Amazon CloudFront events.
++ Your functions will **automatically trigger** in response to the following Amazon CloudFront events.
   + Viewer Request
   + Viewer Response
   + Origin Request
   + Origin Response
-+ CloudFront content can be secured by using X.509 certificates. E.g. you can secure access to a CloudFront video by sharing the link using X.509 certificates.
++ CloudFront content can be secured by using **X.509** certificates. E.g. you can secure access to a CloudFront video by sharing the link using X.509 certificates.
 
 ***
 ## Amazon EMR
-+ <span style="color:blue">Amazon EMR is a web service that enables businesses, researchers, data analysts, and developers to easily and cost-effectively process vast amounts of data. It utilizes a hosted Hadoop framework running on the web-scale infrastructure of Amazon Elastic Compute Cloud (Amazon EC2) and Amazon S3.</span>
++ <span style="color:blue">Amazon EMR is a web service that enables businesses, researchers, data analysts, and developers to easily and cost-effectively process vast amounts of data. It utilizes a hosted **Hadoop** framework running on the web-scale infrastructure of Amazon Elastic Compute Cloud (Amazon EC2) and Amazon S3.</span>
 
 ***
 ## Amazon CloudWatch
 +  CloudWatch has available (**by default**) Amazon EC2 Metrics for your to use for monitoring **CPU utilization**, **Network utilization**, **Disk performance and Disk Reads/Writes**. In case that you need to monitor the below items, you need to prepare a **custom** metric using a Perl or other shell script, as there are no ready to use  metrics for these:
-  +  Memery utilization
-  +  disk swap utilization
-  +  disk space utilization
-  +  page file utilization
-  +  log collection
+    +  Memery utilization
+    +  disk swap utilization
+    +  disk space utilization
+    +  page file utilization
+    +  log collection
 
 
 ***
@@ -901,12 +908,38 @@ The following are the possible target types:
 + You should also verify that your **private key** (.pem) file has been correctly **converted** to the format recognized by **PuTTY (.ppk)**.
 + By default, your instance is enabled for basic monitoring. You can optionally enable detailed monitoring. **Basic** - Data is avaiable automatically in **5-minute** periods at **no charge**. **Detailed** - Data is available in **1-minute** period for an **additional cost**.
 + ElasticCache and DynamoDB are **fully** managed services; Amazon Relational Database Service is a managed database service, which means that you have **partial** control of the underlying database server.
-+ Each instance can be assigned up to **five** security groups.
++ Each **instance** can be assigned up to **five** security groups.
 + **Amazon DynamoDB Accelerator** (DAX) is a **fully** managed, highly avaiable, in-memory cache that can reduce Amazon DynamoDB response times **from milliseconds to microseconds**, even at millions of requests per second.
 + You can secure the privacy of your data in AWS, both at rest and in-transit, through encryption. If your data is stored in EBS Volumns, you can enable EBS Encryption and if it is stored in S3, you can enable client-side and server-side encryption.
 + Transferring data from an **EC2** instance **to** Amazon S3, Glacier, DynamoDB, SES, SQS, SimpleDB in the same AWS Region has **no cost** at all.
-+ The word _ephemeral_ means short-lived or temporary in the English dictionary.
-+ Always remember that the messages in the SQS queue will continue to exist even after the EC2 instance has processed it, until you delete that message.
++ The word _ephemeral_ means **short-lived** or temporary in the English dictionary.
++ Always remember that the messages in the **SQS** queue will **continue to exist even after** the EC2 instance has processed it, until you delete that message.
 + Amazon RDS Multi-AZ deployments provide enhanced availablility and durability for Database Instances, making them a natural fit for production database workloads. When you provision a Multi-AZ DB instance, Amazon RDS autmatically creates a primary DB Instance and synchronously replicates the data to a standby instance in a different AZ. Each AZ runs on its own physically distinct, independent infrastructure, and is engineered to be highly reliable.
-+ In case of an infrastruture failure, Amazon RDS performs an automatic failover to the standnby (or to a read replica in the case of Amazon Aurora), so that you can resume database operations as soon as the failover is complete.
-+ You can store session state data on both DynamoDB and ElastiCache. These AWS services provide high performance storage of key-value pairs which can be used to build a highly available web application.
++ In case of an infrastruture failure, Amazon RDS performs an automatic failover to the standby (or to a read replica in the case of Amazon Aurora), so that you can resume database operations as soon as the failover is complete.
++ You can **store session state data** on both **DynamoDB** and **ElastiCache**. These AWS services provide high performance storage of **key-value pairs** which can be used to build a highly available web application.
++ Remember that an AMI is a **regional** resource and if you need to use this to another region, you have to make a copy of it.
++ To enable access to or from the Internet for instances in a VPC subnet, you must do the following:
+  + Ensure that your subnet's route table points to the internet gateway.
+  + Ensure that intances in your subnet have a globally unique IP address (public IPv4 address, Elastic IP address, or IPv6 address).
+  + Ensure that your network access control and security group rules allow the relevant traffic to flow to and from your instance.
++ All data transferred between any type of **gateway appliance** and **AWS storage** is encrypted using SSL. By default, all data stored by AWS Storage Gateway in S3 is encrypted server-side with Amazon S3-Managed Encryption Keys (SSE-S3). Also, when using the file gateway, you can optionally configure each file share to have your objects encrypted with AWS KMS-Managed Keys using SSE-KMS.
++ Data stored in Amazon **Glacier** is protected by default; only vault owners have access to the Amazon Glacier resources they create. Amazon Glacier encrypts your data at rest by default and supports secure data transit with SSL.
++ Perfect Forward Secrecy
+  + Perfect Forward Secrecy is a feature that provides additional safeguards against the eavesdropping of encrypted data, through the use of a unique random session key. This prevents the decoding of captured data, even if the secret long-term key is compromised.
+  + **Cloudfront** and **Elastic Load Balancing** are the two AWS services that supports Perfect Forward Secrecy.
++ Amazon SQS
+  + In Amazon SQS, you can configure the message retention period to a value from **1 minute** to **14 days**. The **default is 4 days**. Once the message retention limit is reached, your messages are automatically deleted.
+  + A single Amazon SQS message queue can contain an unlimited number of messages. However, there is a 120,000 limit for the number of inflight messages for a standard queue and 20,000 for a FIFO queue. Messages are inflight after they have been received from the queue by a consuming component, but have not yet been deleted from the queue.
++ Amazon Snowball is a **petabyte-scale** data transport solution that uses secure appliances to transfer large amounts of data into and out of the AWS cloud. 
++ Here are the prerequisites for routing traffic to a website that is hosted in an Amazon S3 Bucket
+  + An S3 bucket that is configured to host a static website. The bucket must have the same name as your domain or subdomain. For example, if you want to use the subdomain acme.example.com, the name of the bucket must be acme.example.com.
+  + A registered domain name. You can use Route53 as your domain registrar, or you can use a different registrar.
+  + Route53 as the DNS service for the domain. If you register your domain name by using Route53, we automatically configure Route53 as the DNS service for the domain.
++ **Amazon Simple Queue Service** (SQS) and **Amazon Simple Workflow Service** (SWF) are the services that you can use for creating a **decoupled** architecture in AWS.
++ An elastic network interface (ENI) is a logical networking component in a VPC that represents a virtual network card. You can attach a network interface to an EC2 instance in the following ways:
+  + When it's running (hot attach)
+  + When it's stopped (warm attach)
+  + When the instance is being launched (cold attach).
++ If you need **flexible application management** and **TLS termination** then we recommend that you use **Application Load Balancer**. If **extreme performance** and **static IP** is needed for your application then we recommend that you use** Network Load Balancer**. If your application is built within the **EC2 Classic network **then you should use **Classic Load Balancer**.
+
+
